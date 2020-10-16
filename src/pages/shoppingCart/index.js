@@ -20,7 +20,38 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import Avatar from '@material-ui/core/Avatar';
 // 这个页面用来展示用户添加进购物车的商品
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+    },
+    paper: {
+        margin: `100px auto`,
+        width: '80%',
+    },
+    table: {
+        minWidth: 750,
+    },
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+    img:{
+        display:'flex',
+        justifyContent:'flex-end'
+    }
+}));
+
 // ---------- 创建数据开始 ------------
 function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
@@ -73,11 +104,11 @@ function stableSort(array, comparator) {
 
 // 表格头信息
 const headCells = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-    { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-    { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-    { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-    { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+    { id: 'name', numeric: false, disablePadding: true, label: 'name' },
+    { id: 'calories', numeric: true, disablePadding: false, label: 'img' },
+    { id: 'fat', numeric: true, disablePadding: false, label: 'type' },
+    { id: 'carbs', numeric: true, disablePadding: false, label: 'count' },
+    { id: 'protein', numeric: true, disablePadding: false, label: 'price' },
 ];
 
 // 创建表格头函数
@@ -195,29 +226,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },
-    paper: {
-        width: '100%',
-        marginBottom: theme.spacing(2),
-    },
-    table: {
-        minWidth: 750,
-    },
-    visuallyHidden: {
-        border: 0,
-        clip: 'rect(0 0 0 0)',
-        height: 1,
-        margin: -1,
-        overflow: 'hidden',
-        padding: 0,
-        position: 'absolute',
-        top: 20,
-        width: 1,
-    },
-}));
 
 function Index() {
     const classes = useStyles();
@@ -326,10 +334,12 @@ function Index() {
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                                 {row.name}
                                             </TableCell>
+                                            <TableCell align="center" className={classes.img}>
+                                                <Avatar alt="Remy Sharp" src={`${process.env.PUBLIC_URL}/book.png`}></Avatar>
+                                            </TableCell>
                                             <TableCell align="right">{row.calories}</TableCell>
                                             <TableCell align="right">{row.fat}</TableCell>
                                             <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
                                         </TableRow>
                                     );
                                 })}

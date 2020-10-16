@@ -50,7 +50,7 @@ function TodayRecommand() {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={5}>
-                <GridList className={classes.gridList} cols={5}>
+                <GridList className={classes.gridList} cols={4}>
                     {tileData.map((tile) => (
                         <GridListTile className={classes.gridListTile} key={tile.img}>
                             <img src={tile.img} alt={tile.title} />
@@ -70,7 +70,6 @@ function TodayRecommand() {
                     ))}
                 </GridList>
 
-                <p style={{height:'5px'}}> Today Recommand</p>
             </Paper>
         </div>
     );

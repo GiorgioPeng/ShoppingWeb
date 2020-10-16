@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   // 后期通过对滚动的判定将这个条吸顶 删掉 appbar 组件中的 position="static"
-  root_fixed:{
-    position:'fixed',
-    zIndex:'999'
+  root_fixed: {
+    position: 'fixed',
+    zIndex: '999'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     display: 'inline-block',
-    textAlign:'left'
+    textAlign: 'left'
   },
   search: {
     position: 'relative',
@@ -69,7 +69,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Top() {
+function Top(props) {
+  const Link = props.link;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -116,12 +117,26 @@ export default function Top() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>Shopping Car</MenuItem>
+            <Link to="/login">
+              <MenuItem onClick={handleClose}>
+                Login
+              </MenuItem>
+            </Link>
+            <Link to="/">
+              <MenuItem onClick={handleClose}>
+                Profile
+              </MenuItem>
+            </Link>
+            <Link to="ShoppingCar">
+              <MenuItem onClick={handleClose}>
+                Shopping Car
+            </MenuItem>
+            </Link>
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
-    </div>
+    </div >
   );
 }
+export default Top;
