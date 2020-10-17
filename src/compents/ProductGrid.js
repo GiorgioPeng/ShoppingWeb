@@ -20,16 +20,16 @@ function ProductGrid() {
     function FormRow() {
         return (
             <React.Fragment>
-                <Grid item xs={3} justify="space-between">
+                <Grid item xs={3}>
                     <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
                 </Grid>
-                <Grid item xs={3} justify="space-between">
+                <Grid item xs={3}>
                     <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
                 </Grid>
-                <Grid item xs={3} justify="space-between">
+                <Grid item xs={3}>
                     <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
                 </Grid>
-                <Grid item xs={3} justify="space-between">
+                <Grid item xs={3}>
                     <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
                 </Grid>
             </React.Fragment>

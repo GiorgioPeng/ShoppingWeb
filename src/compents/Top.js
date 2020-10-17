@@ -1,14 +1,12 @@
 import React from 'react'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+
 // TODO 监控用户登陆情况
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,20 +65,25 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  buttons: {
+    display: 'flex',
+    maxWidth: '50%',
+    minWidth: '30%',
+    marginLeft: theme.spacing(3),
+    justifyContent: 'space-between'
+  },
+  buttonsText:{
+    display:'inline-flex',
+    justifyContent:'center',
+    alignItems:'flex-end',
+    fontSize:'15px'
+  }
 }));
 
 function Top(props) {
   const Link = props.link;
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <div className={classes.root}>
       <AppBar>
@@ -101,39 +104,24 @@ function Top(props) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <Link to="/login">
-              <MenuItem onClick={handleClose}>
-                Login
-              </MenuItem>
-            </Link>
+          <div className={classes.buttons}>
             <Link to="/">
-              <MenuItem onClick={handleClose}>
-                Profile
-              </MenuItem>
+              Home Page
             </Link>
-            <Link to="ShoppingCar">
-              <MenuItem onClick={handleClose}>
-                Shopping Car
-            </MenuItem>
+            <Link to="/userinfo">
+              Profile
             </Link>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
+            <Link to="/shoppingcar">
+              <span className={classes.buttonsText}>Shopping Car <ShoppingCartIcon style={{ fontSize: 16 }}/></span>
+            </Link>
+            <Link to="/star">
+              Star
+            </Link>
+            <Link to="/login">
+              Login
+            </Link>
+            {/* <Link to="/">Logout</Link>这里默认是隐藏的 */}
+          </div>
         </Toolbar>
       </AppBar>
     </div >

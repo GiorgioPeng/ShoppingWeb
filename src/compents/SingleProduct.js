@@ -58,7 +58,7 @@ function SingleProduct(props) {
                     </Typography>
                 </Typography>
                 <IconButton aria-label="delete" className={classes.margin}>
-                    <StarRateIcon color="secondary" fontSize="medium" />
+                    <StarRateIcon color="secondary" />
                 </IconButton>
             </CardActions>
         </Card>

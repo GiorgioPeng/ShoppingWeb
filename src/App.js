@@ -11,6 +11,7 @@ import Top from './compents/Top'
 import Index from './pages/index'
 import ShoppingCar from './pages/shoppingCart'
 import Login from './pages/login'
+import UserInfo from './pages/userInfo'
 // 这是这个项目的入口
 
 
@@ -21,8 +22,9 @@ function App() {
         <Top link={Link}/>
         <Switch>
           <Route path="/" exact component={Index}></Route>
-          <Route path="/ShoppingCar" component={ShoppingCar} />
+          <Route path="/shoppingcar" component={ShoppingCar} />
           <Route path="/login" component={Login} />
+          <Route path="/userinfo" component={UserInfo}/>
           <Redirect to="/"></Redirect>
         </Switch>
 
