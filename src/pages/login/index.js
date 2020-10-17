@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: '100vh',
         width: '100vw',
-        // backgroundImage: `url(${process.env.PUBLIC_URL}/bgimg.jpg)`,
-        // backgroundRepeat: 'no-repeat',
-        // backgroundSize: '100% 100%'
+        backgroundImage: `url(${process.env.PUBLIC_URL}/login.jpeg)`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '100% 100%'
     },
     rootForm: {
         position: 'absolute',
@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             width: '25ch',
         },
+        padding:theme.spacing(3),
+        backgroundColor:'rgb(244, 244, 244)',
+        boxShadow:'5px 5px 5px',
+        borderRadius:'10px',
+        opacity:'0.8'
     },
     noneShowPasswordInput: {
         marginTop: theme.spacing(5),
