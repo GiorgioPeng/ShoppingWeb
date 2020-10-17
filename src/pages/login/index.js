@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: '100vh',
         width: '100vw',
-        backgroundImage: `url(${process.env.PUBLIC_URL}/bgimg.jpg)`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: '100% 100%'
+        // backgroundImage: `url(${process.env.PUBLIC_URL}/bgimg.jpg)`,
+        // backgroundRepeat: 'no-repeat',
+        // backgroundSize: '100% 100%'
     },
     rootForm: {
         position: 'absolute',
