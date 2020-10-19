@@ -20,10 +20,10 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     zIndex: '999'
   },
-  bar:{
-    height:theme.spacing(6),
-    display:'flex',
-    justifyContent:'center'
+  bar: {
+    height: theme.spacing(6),
+    display: 'flex',
+    justifyContent: 'center'
 
   },
   menuButton: {
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
       borderRight: '1px solid #333',
       position: 'absolute',
       left: '100%',
-      top:'-50%',
+      top: '-50%',
       height: "200%"
     }
   }
@@ -108,7 +108,7 @@ function Top(props) {
       <AppBar className={classes.bar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            Gao Shiwei's online shopping
+            Online shopping of Municipal party committee
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

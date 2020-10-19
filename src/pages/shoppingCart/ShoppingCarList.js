@@ -8,16 +8,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button'
 // 用来展示商品列表
-const useStyles = makeStyles((theme)=>({
+const useStyles = makeStyles((theme) => ({
     root: {
         margin: '10px auto'
     },
     table: {
         minWidth: 650,
     },
-    item:{
-        cursor:'pointer'
+    item: {
+        cursor: 'pointer'
     }
 }));
 
@@ -46,7 +47,8 @@ function ListProducts() {
                             <TableCell align="left">商品图片</TableCell>
                             <TableCell align="right">商品价格</TableCell>
                             <TableCell align="right">数量</TableCell>
-                            <TableCell align="right">购买日期</TableCell>
+                            <TableCell align="right"> </TableCell>
+                            <TableCell align="right"> </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -65,7 +67,12 @@ function ListProducts() {
                                 </TableCell>
                                 <TableCell align="right">¥{row.price}</TableCell>
                                 <TableCell align="right">{row.count}</TableCell>
-                                <TableCell align="right">{row.date}</TableCell>
+                                <TableCell align="right">
+                                    <Button variant="contained" color="primary">购买</Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="contained" color="secondary">删除</Button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

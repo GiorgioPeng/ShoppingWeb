@@ -23,14 +23,35 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between'
     },
-    price:{
-        display:'inline-flex',
-        justifyContent:'center'
+    price: {
+        display: 'inline-flex',
+        justifyContent: 'center'
     }
 }));
 function SingleProduct(props) {
     const classes = useStyles();
 
+    // 点击收藏的动画
+    const handleStar = (e) => {
+        let temp = document.createElement('div');
+        let event = e;
+        temp.style = `position:absolute;
+                    top:${event.pageY}px;
+                    left:${event.pageX}px;
+                    width:10px;
+                    height:10px;
+                    background-color:red;
+                    transition:all 1.5s`
+        document.body.appendChild(temp)
+        let scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop
+        setTimeout((position)=>{
+            temp.style.top=`${position}px`
+            temp.style.left=`95vw`
+            setTimeout(()=>{
+                document.body.removeChild(temp)
+            },1500)
+        },10,scrollTop)
+    }
     return (
         <Card className={classes.root}>
             <CardActionArea>
@@ -57,7 +78,7 @@ function SingleProduct(props) {
                         {parseInt(Math.random() * 100)}
                     </Typography>
                 </Typography>
-                <IconButton aria-label="delete" className={classes.margin}>
+                <IconButton aria-label="delete" onClick={handleStar} className={classes.margin}>
                     <StarRateIcon color="secondary" />
                 </IconButton>
             </CardActions>
