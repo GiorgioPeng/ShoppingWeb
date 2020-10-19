@@ -14,17 +14,17 @@ const tileData = [
     {
         img: img2,
         title: 'Image2',
-        author: 'author3',
+        author: 'author2',
     },
     {
         img: img3,
         title: 'Image3',
-        author: 'author4',
+        author: 'author3',
     },
     {
         img: img4,
         title: 'Image4',
-        author: 'author5',
+        author: 'author4',
     },
     {
         img: img5,

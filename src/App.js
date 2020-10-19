@@ -13,6 +13,7 @@ import ShoppingCar from './pages/shoppingCart'
 import Login from './pages/login'
 import UserInfo from './pages/userInfo'
 import Star from './pages/star'
+import Detail from './pages/detail'
 // 这是这个项目的入口
 
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/userinfo" component={UserInfo}/>
           <Route path="/star" component={Star}/>
+          <Route path="/detail/:identify" component={Detail}/>
           <Redirect to="/"></Redirect>
         </Switch>
 

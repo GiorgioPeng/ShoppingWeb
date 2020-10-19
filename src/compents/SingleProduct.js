@@ -44,33 +44,43 @@ function SingleProduct(props) {
                     transition:all 1.5s`
         document.body.appendChild(temp)
         let scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop
-        setTimeout((position)=>{
-            temp.style.top=`${position}px`
-            temp.style.left=`95vw`
-            setTimeout(()=>{
+        setTimeout((position) => {
+            temp.style.top = `${position}px`
+            temp.style.left = `95vw`
+            setTimeout(() => {
                 document.body.removeChild(temp)
-            },1500)
-        },10,scrollTop)
+            }, 1500)
+        }, 10, scrollTop)
+    }
+    // 点击商品
+    const handleProduct = (event) => {
+        console.log(event.target)
+        console.log(event.target.getAttribute('identify'))
+        let current = window.location.href
+        let destination = current+'detail/'+event.target.getAttribute('identify')
+        console.log(destination)
+        let w = window.open('about:blank');
+        w.location.href = destination
+        
     }
     return (
         <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea onClick={handleProduct}>
                 <CardMedia
                     component="img"
                     alt="Contemplative Reptile"
                     height="180"
                     image={props.img}
                     title="Contemplative Reptile"
+                    identify = {props.id}
                 />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        Android
-                    </Typography>
+            </CardActionArea>
+
+            <CardContent>
                     <Typography align='left' variant="body2" color="textSecondary" component="p">
-                        Android is developed by GSW
+                        here is the description of the products.
                     </Typography>
                 </CardContent>
-            </CardActionArea>
             <CardActions className={classes.text}>
                 <Typography variant="overline" className={classes.price}>
                     ¥

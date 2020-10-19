@@ -18,19 +18,22 @@ function ProductGrid() {
     const classes = useStyles();
 
     function FormRow() {
+        const arr = []
+        for(let i = 0; i<4;i++)
+            arr.push(parseInt(data.length*Math.random()))
         return (
             <React.Fragment>
                 <Grid item xs={3}>
-                    <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
+                    <SingleProduct id={data[arr[0]].title} img={data[arr[0]].img}/>
                 </Grid>
                 <Grid item xs={3}>
-                    <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
+                    <SingleProduct id={data[arr[1]].title} img={data[arr[1]].img}/>
                 </Grid>
                 <Grid item xs={3}>
-                    <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
+                    <SingleProduct id={data[arr[2]].title} img={data[arr[2]].img}/>
                 </Grid>
                 <Grid item xs={3}>
-                    <SingleProduct img={data[parseInt(data.length*Math.random())].img}/>
+                    <SingleProduct id={data[arr[3]].title} img={data[arr[3]].img}/>
                 </Grid>
             </React.Fragment>
         );
