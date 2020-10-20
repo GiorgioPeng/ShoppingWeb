@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Link,
   Switch,
@@ -23,13 +23,13 @@ function App() {
       <Router>
         <Top link={Link}/>
         <Switch>
-          <Route path="/" exact component={Index}></Route>
+          <Route path="/shoppingweb" exact component={Index}></Route>
           <Route path="/shoppingcar" component={ShoppingCar} />
           <Route path="/login" component={Login} />
           <Route path="/userinfo" component={UserInfo}/>
           <Route path="/star" component={Star}/>
-          <Route path="/detail/:identify" component={Detail}/>
-          <Redirect to="/"></Redirect>
+          <Route path="/shoppingweb/detail/:identify" component={Detail}/>
+          <Redirect to="/shoppingweb"></Redirect>
         </Switch>
 
       </Router>

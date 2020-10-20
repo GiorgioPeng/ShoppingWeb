@@ -57,7 +57,7 @@ function SingleProduct(props) {
         console.log(event.target)
         console.log(event.target.getAttribute('identify'))
         let current = window.location.href
-        let destination = current+'detail/'+event.target.getAttribute('identify')
+        let destination = current+'/detail/'+event.target.getAttribute('identify')
         console.log(destination)
         let w = window.open('about:blank');
         w.location.href = destination

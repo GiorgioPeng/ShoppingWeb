@@ -58,6 +58,7 @@ function Index(props) {
   };
 
   React.useEffect(() => {
+    console.log('hello')
     setIdentify(id)
     setProduct(tileData.filter((e) => e.title === identify)[0])
   }, [identify,id])
