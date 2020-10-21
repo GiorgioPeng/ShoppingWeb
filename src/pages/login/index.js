@@ -127,8 +127,12 @@ function Index(props) {
         const res = await sendPost('back_end/Login', data)
         console.log(res)
         if (res.answer === 'true') {
+            let tempUrl = window.location.href.split('/')
+            tempUrl.pop()
+            tempUrl = tempUrl.join('/')
             props.setLoginInfo(res)
-            window.location.href = 'http://localhost:3000/#/shoppingweb'
+            // 跳回主页
+            window.location.href = tempUrl + '/shoppingweb'
         }
         else {
             handleNotifyOpen();
@@ -237,7 +241,7 @@ function Index(props) {
                     </ButtonBase>
                 </div>
             </div>
-            <Notify open={notifyOpen} message={'用户名或密码错误'} type={'error'} handleClose={handleNotifyClose}/>
+            <Notify open={notifyOpen} message={'用户名或密码错误'} type={'error'} handleClose={handleNotifyClose} />
         </div>
     )
 }
