@@ -11,6 +11,8 @@ import FormControl from '@material-ui/core/FormControl';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
+import sendPost from '../../api/sendPost'
+import Notify from '../../compents/Notify'
 // 这个页面用来写登陆页面
 
 
@@ -33,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             width: '25ch',
         },
-        padding:theme.spacing(3),
-        backgroundColor:'rgb(244, 244, 244)',
-        boxShadow:'5px 5px 5px',
-        borderRadius:'10px',
-        opacity:'0.8'
+        padding: theme.spacing(3),
+        backgroundColor: 'rgb(244, 244, 244)',
+        boxShadow: '5px 5px 5px',
+        borderRadius: '10px',
+        opacity: '0.8'
     },
     noneShowPasswordInput: {
         marginTop: theme.spacing(5),
@@ -95,15 +97,43 @@ const useStyles = makeStyles((theme) => ({
         transition: theme.transitions.create('opacity'),
     },
 }));
-function Index() {
+function Index(props) {
     const classes = useStyles();
     const [values, setValues] = React.useState({
-        tel: '',
+        PhoneNumber: '',
         showPasswordInput: false,
         password: '',
         showPassword: false,
         showButton: false
     });
+
+    const [notifyOpen, setNotifyOpen] = React.useState(false);
+
+    const handleNotifyOpen = () => {
+        setNotifyOpen(true)
+    }
+
+    const handleNotifyClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setNotifyOpen(false);
+    };
+    const submit = async () => {
+        // const url = 'http://47.103.207.168:8081/back_end/Login'
+        // PhoneNumber=15288850612&password=123456
+        const data = `PhoneNumber=${values.PhoneNumber}&password=${values.password}`
+        const res = await sendPost('back_end/Login', data)
+        console.log(res)
+        if (res.answer === 'true') {
+            props.setLoginInfo(res)
+            window.location.href = 'http://localhost:3000/#/shoppingweb'
+        }
+        else {
+            handleNotifyOpen();
+        }
+    }
 
     const handleChange = (prop) => (event) => {
         if (event.target.value.length >= 4 && prop === 'password') {
@@ -131,15 +161,15 @@ function Index() {
     return (
         <div className={classes.root}>
             <div className={classes.bgdrop}>
-                <form className={classes.rootForm} noValidate autoComplete="on">
+                <div className={classes.rootForm}>
                     <FormControl className={clsx(classes.margin, classes.textField)} variant="outlined">
-                        <InputLabel htmlFor="tel">Phone number</InputLabel>
+                        <InputLabel htmlFor="PhoneNumber">Phone number</InputLabel>
                         <OutlinedInput
-                            id="tel"
+                            id="PhoneNumber"
                             placeholder="phone number"
                             variant="outlined"
-                            value={values.tel}
-                            onChange={handleChange('tel')}
+                            value={values.PhoneNumber}
+                            onChange={handleChange('PhoneNumber')}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -189,7 +219,7 @@ function Index() {
                     <ButtonBase
                         focusRipple
                         key="login"
-                        type='submit'
+                        onClick={submit}
                         className={clsx(classes.image, values.showButton ? '' : classes.noneButton)}
                         focusVisibleClassName={classes.focusVisible}
                     >
@@ -205,8 +235,9 @@ function Index() {
                             </Typography>
                         </span>
                     </ButtonBase>
-                </form>
+                </div>
             </div>
+            <Notify open={notifyOpen} message={'用户名或密码错误'} type={'error'} handleClose={handleNotifyClose}/>
         </div>
     )
 }

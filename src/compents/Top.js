@@ -10,6 +10,7 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined';
 import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
+import Notify from './Notify'
 // TODO 监控用户登陆情况
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,7 +103,19 @@ const useStyles = makeStyles((theme) => ({
 function Top(props) {
   const Link = props.link;
   const classes = useStyles();
+  const [notifyOpen, setNotifyOpen] = React.useState(false)
+  const handleNotifyOpen = () => {
+    if (!props.loginInfo)
+      setNotifyOpen(true)
+  }
 
+  const handleNotifyClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setNotifyOpen(false);
+  };
   return (
     <div className={classes.root}>
       <AppBar className={classes.bar}>
@@ -127,22 +140,29 @@ function Top(props) {
             <Link to="/">
               <span className={classes.buttonsText}>Home Page<HomeOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
-            <Link to="/userinfo">
+            <Link onClick={handleNotifyOpen} to="/userinfo">
               <span className={classes.buttonsText}>User Info<PermIdentityOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
-            <Link to="/shoppingcar">
+            <Link onClick={handleNotifyOpen} to="/shoppingcar">
               <span className={classes.buttonsText}>Shopping Car<ShoppingCartOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
-            <Link to="/star">
+            <Link onClick={handleNotifyOpen} to="/star">
               <span className={classes.buttonsText}>Star<GradeOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
-            <Link to="/login">
-              <span className={classes.buttonsText}>Login<VpnKeyOutlinedIcon style={{ fontSize: 16 }} /></span>
-            </Link>
+            {props.loginInfo ?
+              <Link to="/logout">
+                <span className={classes.buttonsText}>Logout<VpnKeyOutlinedIcon style={{ fontSize: 16 }} /></span>
+              </Link>
+              :
+              <Link to="/login">
+                <span className={classes.buttonsText}>Login<VpnKeyOutlinedIcon style={{ fontSize: 16 }} /></span>
+              </Link>
+            }
             {/* <Link to="/">Logout</Link>这里默认是隐藏的 */}
           </div>
         </Toolbar>
       </AppBar>
+      <Notify open={notifyOpen} message={'请先登录'} type={'warning'} handleClose={handleNotifyClose} />
     </div >
   );
 }

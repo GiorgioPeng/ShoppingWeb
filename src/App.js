@@ -18,17 +18,51 @@ import Detail from './pages/detail'
 
 
 function App() {
+  const [loginInfo, setLoginInfo] = React.useState(null)
   return (
     <div className="App">
       <Router>
-        <Top link={Link}/>
+        <Top link={Link} loginInfo={loginInfo} />
         <Switch>
           <Route path="/shoppingweb" exact component={Index}></Route>
-          <Route path="/shoppingcar" component={ShoppingCar} />
-          <Route path="/login" component={Login} />
-          <Route path="/userinfo" component={UserInfo}/>
-          <Route path="/star" component={Star}/>
-          <Route path="/shoppingweb/detail/:identify" component={Detail}/>
+          <Route path="/shoppingcar"
+            render={() =>
+              loginInfo ? (
+                <ShoppingCar loginInfo={loginInfo}></ShoppingCar>
+              ) : (
+                  <Redirect
+                    to={{
+                      pathname: "/login"
+                    }}
+                  ></Redirect>
+                )
+            } />
+          <Route path="/login" component={() => (<Login setLoginInfo={setLoginInfo} />)} />
+          <Route path="/userinfo"
+            render={() =>
+              loginInfo ? (
+                <UserInfo loginInfo={loginInfo}></UserInfo>
+              ) : (
+                  <Redirect
+                    to={{
+                      pathname: "/login"
+                    }}
+                  ></Redirect>
+                )
+            } />
+          <Route path="/star"
+            render={() =>
+              loginInfo ? (
+                <Star loginInfo={loginInfo}></Star>
+              ) : (
+                  <Redirect
+                    to={{
+                      pathname: "/login"
+                    }}
+                  ></Redirect>
+                )
+            } />
+          <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Redirect to="/shoppingweb"></Redirect>
         </Switch>
 

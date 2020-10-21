@@ -5,8 +5,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase'
-import Button from '@material-ui/core/Button';
-import ListProducts from './ListProducts'
+import BuyerListProducts from './BuyerListProducts'
+import SellerListProducts from './SellerListProducts'
 // 这个页面用来展示用户的一些数据, 比如交易记录
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,12 +33,6 @@ const useBaseInfoStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     alignItems: 'center'
   },
-}));
-const useButtonStyles = makeStyles((theme) => ({
-  buttons: {
-    height: '100%',
-    width: '100%',
-  }
 }));
 function BaseInfo() {
   const classes = useBaseInfoStyles();
@@ -127,7 +121,15 @@ function Index() {
       <Divider />
       {/* <FourButtons /> */}
       {/* <Divider /> */}
-      <ListProducts/>
+      <BuyerListProducts />
+      <Divider />
+      <Divider />
+      <Divider />
+      <Divider />
+      <Typography variant="subtitle1" color="textSecondary">
+        发布的商品
+      </Typography>
+      <SellerListProducts />
     </div>
   );
 }
