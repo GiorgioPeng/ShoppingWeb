@@ -121,7 +121,7 @@ function Top(props) {
       <AppBar className={classes.bar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            Online shopping of Municipal party committee
+            {props.loginInfo?`Hello, ${props.loginInfo.name}`:`Online shopping of Municipal party committee`}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
