@@ -14,6 +14,7 @@ import Login from './pages/login'
 import UserInfo from './pages/userInfo'
 import Star from './pages/star'
 import Detail from './pages/detail'
+import Register from './pages/register'
 // 这是这个项目的入口
 
 
@@ -62,6 +63,7 @@ function App() {
                   ></Redirect>
                 )
             } />
+          <Route path="/register" component={Register}/>
           <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Redirect to="/shoppingweb"></Redirect>
         </Switch>

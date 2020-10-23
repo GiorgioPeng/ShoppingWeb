@@ -13,6 +13,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import sendPost from '../../api/sendPost'
 import Notify from '../../compents/Notify'
+import Button from '@material-ui/core/Button'
 // 这个页面用来写登陆页面
 
 
@@ -97,6 +98,18 @@ const useStyles = makeStyles((theme) => ({
         transition: theme.transitions.create('opacity'),
     },
 }));
+
+const linkTo = (distination,b)=>{
+    let tempUrl = window.location.href.split('/')
+    tempUrl.pop()
+    tempUrl = tempUrl.join('/')
+    if(typeof b === 'function'){
+        b();
+    }
+    window.location.href = tempUrl + '/' + distination
+}
+
+
 function Index(props) {
     const classes = useStyles();
     const [values, setValues] = React.useState({
@@ -127,12 +140,7 @@ function Index(props) {
         const res = await sendPost('back_end/Login', data)
         console.log(res)
         if (res.answer === 'true') {
-            let tempUrl = window.location.href.split('/')
-            tempUrl.pop()
-            tempUrl = tempUrl.join('/')
-            props.setLoginInfo(res)
-            // 跳回主页
-            window.location.href = tempUrl + '/shoppingweb'
+            linkTo('shoppingweb',()=>{props.setLoginInfo(res)})
         }
         else {
             handleNotifyOpen();
@@ -162,15 +170,18 @@ function Index(props) {
     const handleMouseDownPasswordInput = (event) => {
         event.preventDefault();
     };
+    
+    const register = ()=>{
+        linkTo('register')
+    }
     return (
         <div className={classes.root}>
             <div className={classes.bgdrop}>
                 <div className={classes.rootForm}>
-                    <FormControl className={clsx(classes.margin, classes.textField)} variant="outlined">
+                    <FormControl  variant="outlined">
                         <InputLabel htmlFor="PhoneNumber">Phone number</InputLabel>
                         <OutlinedInput
                             id="PhoneNumber"
-                            placeholder="phone number"
                             variant="outlined"
                             value={values.PhoneNumber}
                             onChange={handleChange('PhoneNumber')}
@@ -192,16 +203,13 @@ function Index(props) {
                     </FormControl>
 
                     <FormControl
-                        className={clsx(classes.margin,
-                            classes.textField,
-                            values.showPasswordInput ? classes.showPasswordInput : classes.noneShowPasswordInput)}
+                        className={clsx(values.showPasswordInput && classes.showPasswordInput, !values.showPasswordInput && classes.noneShowPasswordInput)}
                         variant="outlined"
                     >
                         <InputLabel htmlFor="password">Password</InputLabel>
                         <OutlinedInput
                             id="password"
                             type={values.showPassword ? 'text' : 'password'}
-                            placeholder="password"
                             variant="outlined"
                             value={values.password}
                             onChange={handleChange('password')}
@@ -239,6 +247,10 @@ function Index(props) {
                             </Typography>
                         </span>
                     </ButtonBase>
+                    <Typography variant='subtitle2' color="textSecondary">
+                        没有账号?
+                        <Button onClick={register} setLoginInfo={props.setLoginInfo}>立即注册</Button>
+                    </Typography>
                 </div>
             </div>
             <Notify open={notifyOpen} message={'用户名或密码错误'} type={'error'} handleClose={handleNotifyClose} />
