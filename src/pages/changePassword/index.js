@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import clsx from 'clsx';
 import InputLabel from '@material-ui/core/InputLabel';
 import Visibility from '@material-ui/icons/Visibility';
@@ -8,14 +8,10 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FormControl from '@material-ui/core/FormControl';
-import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import sendPost from '../../api/sendPost'
 import Notify from '../../compents/Notify'
-import Button from '@material-ui/core/Button'
-// 这个页面用来写登陆页面
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,15 +38,8 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px',
         opacity: '0.8'
     },
-    noneShowPasswordInput: {
-        marginTop: theme.spacing(5),
-        transition: 'all 0.5s linear',
-        opacity: '0'
-    },
-    showPasswordInput: {
-        marginTop: theme.spacing(5),
-        transition: 'all 0.5s linear',
-        opacity: '1'
+    input:{
+        marginTop:theme.spacing(2)
     },
     image: {
         position: 'relative',
@@ -68,9 +57,6 @@ const useStyles = makeStyles((theme) => ({
                 border: '4px solid currentColor',
             },
         },
-    },
-    noneButton: {
-        display: 'none'
     },
     focusVisible: {},
     imageButton: {
@@ -99,27 +85,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const linkTo = (distination,b)=>{
-    let tempUrl = window.location.href.split('/')
-    tempUrl.pop()
-    tempUrl = tempUrl.join('/')
-    if(typeof b === 'function'){
-        b();
-    }
-    window.location.href = tempUrl + '/' + distination
-}
-
-
 function Index(props) {
     const classes = useStyles();
     const [values, setValues] = React.useState({
-        PhoneNumber: '',
-        showPasswordInput: false,
-        password: '',
+        OldPassword: '',
+        NewPassword: '',
         showPassword: false,
-        showButton: false
     });
-
     const [notifyOpen, setNotifyOpen] = React.useState(false);
 
     const handleNotifyOpen = () => {
@@ -134,13 +106,11 @@ function Index(props) {
         setNotifyOpen(false);
     };
     const submit = async () => {
-        // const url = 'http://47.103.207.168:8081/back_end/Login'
-        // PhoneNumber=15288850612&password=123456
-        const data = `PhoneNumber=${values.PhoneNumber}&Password=${values.password}`
-        const res = await sendPost('back_end/Login', data)
+        const data = `OldPassword=${values.OldPassword}&NewPassword=${values.NewPassword}`
+        const res = await sendPost('back_end/ChangePassword', data)
         console.log(res)
         if (res.answer === 'true') {
-            linkTo('shoppingweb',()=>{props.setLoginInfo(res)})
+            linkTo('shoppingweb', () => { props.setLoginInfo(res) })
         }
         else {
             handleNotifyOpen();
@@ -148,13 +118,7 @@ function Index(props) {
     }
 
     const handleChange = (prop) => (event) => {
-        if (event.target.value.length >= 4 && prop === 'password') {
-            setValues({ ...values, [prop]: event.target.value, showButton: true });
-            return;
-        }
-        else {
-            setValues({ ...values, [prop]: event.target.value });
-        }
+        setValues({ ...values, [prop]: event.target.value });
     };
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
@@ -163,56 +127,31 @@ function Index(props) {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-    const handleClickShowPasswordInput = () => {
-        setValues({ ...values, showPasswordInput: !values.showPasswordInput });
-    };
-
-    const handleMouseDownPasswordInput = (event) => {
-        event.preventDefault();
-    };
-    
-    const register = ()=>{
-        linkTo('register')
+    const linkTo = (distination, b) => {
+        let tempUrl = window.location.href.split('/')
+        tempUrl.pop()
+        tempUrl = tempUrl.join('/')
+        if (typeof b === 'function') {
+            b();
+        }
+        window.location.href = tempUrl + '/' + distination
     }
+
     return (
         <div className={classes.root}>
             <div className={classes.bgdrop}>
                 <div className={classes.rootForm}>
-                    <FormControl  variant="outlined">
-                        <InputLabel htmlFor="PhoneNumber">Phone number</InputLabel>
-                        <OutlinedInput
-                            id="PhoneNumber"
-                            variant="outlined"
-                            value={values.PhoneNumber}
-                            onChange={handleChange('PhoneNumber')}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPasswordInput}
-                                        onMouseDown={handleMouseDownPasswordInput}
-                                        edge="end"
-                                    >
-                                        <KeyboardReturnIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            onBlur={() => { setValues({ ...values, showPasswordInput: true }) }}
-                            labelWidth={130}
-                        />
-                    </FormControl>
-
                     <FormControl
-                        className={clsx(values.showPasswordInput && classes.showPasswordInput, !values.showPasswordInput && classes.noneShowPasswordInput)}
                         variant="outlined"
+                        className={classes.input}
                     >
-                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <InputLabel htmlFor="OldPassword">Old Password</InputLabel>
                         <OutlinedInput
-                            id="password"
+                            id="OldPassword"
                             type={values.showPassword ? 'text' : 'password'}
                             variant="outlined"
-                            value={values.password}
-                            onChange={handleChange('password')}
+                            value={values.OldPassword}
+                            onChange={handleChange('OldPassword')}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -225,14 +164,41 @@ function Index(props) {
                                     </IconButton>
                                 </InputAdornment>
                             }
-                            labelWidth={90}
+                            labelWidth={130}
+                        />
+                    </FormControl>
+
+                    <FormControl
+                        variant="outlined"
+                        className={classes.input}
+                    >
+                        <InputLabel htmlFor="NewPassword">New Password</InputLabel>
+                        <OutlinedInput
+                            id="NewPassword"
+                            type={values.showPassword ? 'text' : 'password'}
+                            variant="outlined"
+                            value={values.NewPassword}
+                            onChange={handleChange('NewPassword')}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            labelWidth={140}
                         />
                     </FormControl>
                     <ButtonBase
                         focusRipple
-                        key="login"
+                        key="changePassword"
                         onClick={submit}
-                        className={clsx(classes.image, values.showButton ? '' : classes.noneButton)}
+                        className={clsx(classes.image)}
                         focusVisibleClassName={classes.focusVisible}
                     >
                         <span className={classes.imageButton}>
@@ -242,18 +208,14 @@ function Index(props) {
                                 color="inherit"
                                 className={classes.imageTitle}
                             >
-                                <b>LOGIN</b>
+                                <b>确定更改</b>
                                 <span className={classes.imageMarked} />
                             </Typography>
                         </span>
                     </ButtonBase>
-                    <Typography variant='subtitle2' color="textSecondary">
-                        没有账号?
-                        <Button onClick={register} setLoginInfo={props.setLoginInfo}>立即注册</Button>
-                    </Typography>
                 </div>
             </div>
-            <Notify open={notifyOpen} message={'用户名或密码错误'} type={'error'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen} message={'密码错误'} type={'error'} handleClose={handleNotifyClose} />
         </div>
     )
 }

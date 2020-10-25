@@ -17,6 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Notify from '../../compents/Notify'
+import sendPost from '../../api/sendPost'
 
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
@@ -66,6 +67,16 @@ const useBackDropStyles = makeStyles((theme) => ({
 }))
 const NewProduct = (props) => {
     const classes = useBackDropStyles()
+    const [productData,setProductData] = React.useState(
+        {
+            'ItemName':'',
+            'ItemPrice':0,
+            'ItemType':'',
+            'ItemDescription':'',
+            'ItemQuantity':0,
+            'ItemPicture':''
+        }
+    )
     const imgRef = React.createRef()
     const displayRef = React.createRef()
     const preview = () => {
@@ -73,8 +84,10 @@ const NewProduct = (props) => {
         const file = imgRef.current.files[0]
         if (file) {
             displayRef.current.src = window.URL.createObjectURL(file)
+            setProductData({ ...productData, 'ItemPicture': file });
         }
     }
+    
     const handleLoad = () => {
         displayRef.current.style.display = 'block'
         window.URL.revokeObjectURL(displayRef.current.src)
@@ -91,10 +104,18 @@ const NewProduct = (props) => {
 
         setNotifyOpen(false);
     };
-    const ensurePublish = () => {
-        handleNotifyOpen(true)
-        setTimeout(props.handleClose(),1000)// 模拟向后端请求
+    const ensurePublish = async () => {
+        const data = `ItemName=${productData.ItemName}&ItemType=${productData.ItemType}&ItemPrice=${productData.ItemPrice}&ItemPicture=${productData.ItemPicture}&ItemDescription=${productData.ItemDescription}&ItemQuantity=${productData.ItemQuantity}`
+        const res = await sendPost('back_end/add', data)
+        console.log(res)
+        if (res.ItemID !== 'false') {
+            handleNotifyOpen(true)
+            props.handleClose()
+        }
 
+    }
+    const handleChange = (prop) => (event) => {
+        setProductData({ ...productData, [prop]: event.target.value });
     }
     return (
         <div>
@@ -106,19 +127,24 @@ const NewProduct = (props) => {
                 <DialogContent>
                     <Grid container spacing={3}>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField variant="outlined" label="商品名称" size="small" />
+                            <TextField value={productData.ItemName} onChange={handleChange('ItemName')} variant="outlined" label="商品名称" size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField variant="outlined" label="商品描述" size="small" />
+                            <TextField value={productData.ItemType} onChange={handleChange('ItemType')} variant="outlined" label="商品类型" size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField type='number' variant="outlined" label="商品数量" size="small" />
+                            <TextField value={productData.ItemDescription} onChange={handleChange('ItemDescription')} label="商品描述" size="large" />
+                        </Grid>
+                        <Grid className={classes.content} item xs={12}>
+                            <TextField value={productData.ItemQuantity} onChange={handleChange('ItemQuantity')} type='number' variant="outlined" label="商品数量" size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
                             <TextField
                                 type='number'
                                 variant="outlined"
                                 label="商品价格"
+                                value={productData.ItemPrice}
+                                onChange={handleChange('ItemPrice')}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                 }}

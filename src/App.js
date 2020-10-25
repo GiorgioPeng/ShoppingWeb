@@ -15,6 +15,7 @@ import UserInfo from './pages/userInfo'
 import Star from './pages/star'
 import Detail from './pages/detail'
 import Register from './pages/register'
+import ChangePassword from './pages/changePassword'
 // 这是这个项目的入口
 
 
@@ -28,7 +29,7 @@ function App() {
           <Route path="/shoppingweb" exact component={Index}></Route>
           <Route path="/shoppingcar"
             render={() =>
-              loginInfo ? (
+              !loginInfo ? (
                 <ShoppingCar loginInfo={loginInfo}></ShoppingCar>
               ) : (
                   <Redirect
@@ -41,7 +42,7 @@ function App() {
           <Route path="/login" component={() => (<Login setLoginInfo={setLoginInfo} />)} />
           <Route path="/userinfo"
             render={() =>
-              loginInfo ? (
+              !loginInfo ? (
                 <UserInfo loginInfo={loginInfo}></UserInfo>
               ) : (
                   <Redirect
@@ -53,8 +54,20 @@ function App() {
             } />
           <Route path="/star"
             render={() =>
-              loginInfo ? (
+              !loginInfo ? (
                 <Star loginInfo={loginInfo}></Star>
+              ) : (
+                  <Redirect
+                    to={{
+                      pathname: "/login"
+                    }}
+                  ></Redirect>
+                )
+            } />
+            <Route path="/changepassword"
+            render={() =>
+              loginInfo ? (
+                <ChangePassword loginInfo={loginInfo}></ChangePassword>
               ) : (
                   <Redirect
                     to={{

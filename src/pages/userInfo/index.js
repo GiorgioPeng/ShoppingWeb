@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase'
 import BuyerListProducts from './BuyerListProducts'
 import SellerListProducts from './SellerListProducts'
+import Button from '@material-ui/core/Button'
 // 这个页面用来展示用户的一些数据, 比如交易记录
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,8 +35,19 @@ const useBaseInfoStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
 }));
+
 function BaseInfo() {
   const classes = useBaseInfoStyles();
+
+  const linkTo = (distination,b)=>{
+      let tempUrl = window.location.href.split('/')
+      tempUrl.pop()
+      tempUrl = tempUrl.join('/')
+      if(typeof b === 'function'){
+          b();
+      }
+      window.location.href = tempUrl + '/' + distination
+  }
   return (
     <Grid container spacing={3}>
       <Grid item>
@@ -56,62 +68,22 @@ function BaseInfo() {
           User name
       </Typography>
       </Grid>
-      <Grid item xs={7}>
-        <Typography
-          color="textSecondary"
-          variant='body1'
-          align="right"
-        >
-          Tel: 12345678901
-      </Typography>
+      <Grid container item xs={7}>
+        <Grid item xs={8}></Grid>
+        <Grid item xs={4}>
+          <Typography
+            color="textSecondary"
+            variant='body1'
+            align="right"
+          >
+            Tel: 12345678901
+            </Typography>
+
+          <Button onClick={()=>linkTo('changepassword')} color="secondary">修改密码</Button>
+        </Grid>
       </Grid>
     </Grid>)
 }
-// function FourButtons() {
-//   const classes = useButtonStyles();
-//   return (
-//     <Grid container spacing={1}>
-//       <Grid item xs={3}>
-//         <Typography
-//           color="textPrimary"
-//           variant='caption'
-//           align='center'
-//         >
-//           <Button className={classes.buttons}>待付款</Button>
-//         </Typography>
-//       </Grid>
-//       <Divider orientation="vertical" flexItem />
-//       <Grid item xs={3}>
-//         <Typography
-//           color="textPrimary"
-//           variant='caption'
-//           align='center'
-//         >
-//           <Button className={classes.buttons}>待收货</Button>
-//         </Typography>
-//       </Grid>
-//       <Divider orientation="vertical" flexItem />
-//       <Grid item xs={3}>
-//         <Typography
-//           color="textPrimary"
-//           variant='caption'
-//           align='center'
-//         >
-//           <Button className={classes.buttons}>待评价</Button>
-//         </Typography>
-//       </Grid>
-//       <Divider orientation="vertical" flexItem />
-//       <Grid item xs={true}>
-//         <Typography
-//           color="textPrimary"
-//           variant='caption'
-//           align='center'
-//         >
-//           <Button className={classes.buttons}>售后</Button>
-//         </Typography>
-//       </Grid>
-//     </Grid>)
-// }
 
 function Index() {
   const classes = useStyles();
@@ -119,8 +91,6 @@ function Index() {
     <div className={classes.root}>
       <BaseInfo />
       <Divider />
-      {/* <FourButtons /> */}
-      {/* <Divider /> */}
       <BuyerListProducts />
       <Divider />
       <Divider />
