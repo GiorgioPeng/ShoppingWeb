@@ -21,6 +21,9 @@ import ChangePassword from './pages/changePassword'
 
 function App() {
   const [loginInfo, setLoginInfo] = React.useState(null)
+  React.useEffect(() => {
+    console.log(loginInfo)
+  }, [loginInfo])
   return (
     <div className="App">
       <Router>
@@ -29,7 +32,7 @@ function App() {
           <Route path="/shoppingweb" exact component={Index}></Route>
           <Route path="/shoppingcar"
             render={() =>
-              !loginInfo ? (
+              loginInfo ? (
                 <ShoppingCar loginInfo={loginInfo}></ShoppingCar>
               ) : (
                   <Redirect
@@ -39,10 +42,9 @@ function App() {
                   ></Redirect>
                 )
             } />
-          <Route path="/login" component={() => (<Login setLoginInfo={setLoginInfo} />)} />
           <Route path="/userinfo"
             render={() =>
-              !loginInfo ? (
+              loginInfo ? (
                 <UserInfo loginInfo={loginInfo}></UserInfo>
               ) : (
                   <Redirect
@@ -54,7 +56,7 @@ function App() {
             } />
           <Route path="/star"
             render={() =>
-              !loginInfo ? (
+              loginInfo ? (
                 <Star loginInfo={loginInfo}></Star>
               ) : (
                   <Redirect
@@ -64,7 +66,7 @@ function App() {
                   ></Redirect>
                 )
             } />
-            <Route path="/changepassword"
+          <Route path="/changepassword"
             render={() =>
               loginInfo ? (
                 <ChangePassword loginInfo={loginInfo}></ChangePassword>
@@ -76,7 +78,8 @@ function App() {
                   ></Redirect>
                 )
             } />
-          <Route path="/register" component={Register}/>
+          <Route path="/login" component={() => (<Login setLoginInfo={setLoginInfo} />)} />
+          <Route path="/register" component={Register} />
           <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Redirect to="/shoppingweb"></Redirect>
         </Switch>

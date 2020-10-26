@@ -36,9 +36,9 @@ const useBaseInfoStyles = makeStyles((theme) => ({
   },
 }));
 
-function BaseInfo() {
+function BaseInfo(props) {
   const classes = useBaseInfoStyles();
-
+  const {loginInfo} = props
   const linkTo = (distination,b)=>{
       let tempUrl = window.location.href.split('/')
       tempUrl.pop()
@@ -65,7 +65,7 @@ function BaseInfo() {
           color="textPrimary"
           variant='h6'
         >
-          User name
+          {loginInfo.AccountName}
       </Typography>
       </Grid>
       <Grid container item xs={7}>
@@ -76,7 +76,7 @@ function BaseInfo() {
             variant='body1'
             align="right"
           >
-            Tel: 12345678901
+            Tel: {loginInfo.PhoneNumber}
             </Typography>
 
           <Button onClick={()=>linkTo('changepassword')} color="secondary">修改密码</Button>
@@ -85,13 +85,13 @@ function BaseInfo() {
     </Grid>)
 }
 
-function Index() {
+function Index(props) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <BaseInfo />
+      <BaseInfo loginInfo={props.loginInfo}/>
       <Divider />
-      <BuyerListProducts />
+      <BuyerListProducts loginInfo={props.loginInfo}/>
       <Divider />
       <Divider />
       <Divider />
@@ -99,7 +99,7 @@ function Index() {
       <Typography variant="subtitle1" color="textSecondary">
         发布的商品
       </Typography>
-      <SellerListProducts />
+      <SellerListProducts loginInfo={props.loginInfo}/>
     </div>
   );
 }

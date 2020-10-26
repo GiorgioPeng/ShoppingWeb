@@ -11,9 +11,11 @@ import FormControl from '@material-ui/core/FormControl';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import sendPost from '../../api/sendPost'
-import Notify from '../../compents/Notify'
-import Button from '@material-ui/core/Button'
+import sendLoginPost from '../../api/sendLoginPost';
+import Notify from '../../compents/Notify';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
 // 这个页面用来写登陆页面
 
 
@@ -108,7 +110,22 @@ const linkTo = (distination,b)=>{
     }
     window.location.href = tempUrl + '/' + distination
 }
+const useCircularIndeterminateStyles = makeStyles((theme) => ({
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
+  }));
 
+function CircularIndeterminate(props) {
+    const classes = useCircularIndeterminateStyles();
+  
+    return (
+    <Backdrop className={classes.backdrop} open={props.backDropOpen} onClick={props.handle}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+}
 
 function Index(props) {
     const classes = useStyles();
@@ -119,6 +136,8 @@ function Index(props) {
         showPassword: false,
         showButton: false
     });
+
+    const [backDropOpen, setBackdropOpen] = React.useState(false);
 
     const [notifyOpen, setNotifyOpen] = React.useState(false);
 
@@ -136,11 +155,12 @@ function Index(props) {
     const submit = async () => {
         // const url = 'http://47.103.207.168:8081/back_end/Login'
         // PhoneNumber=15288850612&password=123456
+        setBackdropOpen(true)
         const data = `PhoneNumber=${values.PhoneNumber}&Password=${values.password}`
-        const res = await sendPost('back_end/Login', data)
+        const res = await sendLoginPost('back_end/Login', data)
         console.log(res)
         if (res.answer === 'true') {
-            linkTo('shoppingweb',()=>{props.setLoginInfo(res)})
+            linkTo('shoppingweb',()=>{props.setLoginInfo(res.AccountInformation[0])})
         }
         else {
             handleNotifyOpen();
@@ -253,6 +273,7 @@ function Index(props) {
                     </Typography>
                 </div>
             </div>
+            <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
             <Notify open={notifyOpen} message={'用户名或密码错误'} type={'error'} handleClose={handleNotifyClose} />
         </div>
     )
