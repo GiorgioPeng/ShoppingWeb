@@ -9,7 +9,7 @@ const sendPost = async (postfix, data) => {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, cors, *same-origin
     }).then(response => response.json())
-    console.log(responded)
+    // console.log(responded)
     return responded;
 }
 export default sendPost;

@@ -9,6 +9,8 @@ import BuyerListProducts from './BuyerListProducts'
 import SellerListProducts from './SellerListProducts'
 import Button from '@material-ui/core/Button'
 import linkTo from '../../compents/LinkTo'
+import sendPost from '../../api/sendPost'
+import CircularIndeterminate from '../../compents/CircularIndeterminate'
 // 这个页面用来展示用户的一些数据, 比如交易记录
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,6 +89,21 @@ function BaseInfo(props) {
 
 function Index(props) {
   const classes = useStyles();
+  const [backDropOpen, setBackdropOpen] = React.useState(false);
+
+  React.useEffect(()=>{
+    const getProductsInfo = async ()=> {
+        setBackdropOpen(true)
+        const res = await sendPost('back_end/MyAllItem')
+        console.log('MyAllItem')
+        console.log(res)
+        // if(res){
+        //     setItemData(res.Item)
+        // }
+        setBackdropOpen(false)
+    }
+    getProductsInfo()
+},[])
   return (
     <div className={classes.root}>
       <BaseInfo loginInfo={props.loginInfo}/>
@@ -100,6 +117,7 @@ function Index(props) {
         发布的商品
       </Typography>
       <SellerListProducts loginInfo={props.loginInfo}/>
+      <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
     </div>
   );
 }

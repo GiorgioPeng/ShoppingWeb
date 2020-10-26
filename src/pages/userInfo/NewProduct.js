@@ -29,9 +29,9 @@ const useBackDropStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center'
     },
-    description:{
-        width:'80%',
-        textAlign:'center'
+    description: {
+        width: '80%',
+        textAlign: 'center'
     }
 }))
 
@@ -39,14 +39,14 @@ const useBackDropStyles = makeStyles((theme) => ({
 
 const NewProduct = (props) => {
     const classes = useBackDropStyles()
-    const [productData,setProductData] = React.useState(
+    const [productData, setProductData] = React.useState(
         {
-            'ItemName':'',
-            'ItemPrice':0,
-            'ItemType':'',
-            'ItemDescription':'',
-            'ItemQuantity':0,
-            'ItemPicture':''
+            'ItemName': '',
+            'ItemPrice': 0,
+            'ItemType': '',
+            'ItemDescription': '',
+            'ItemQuantity': 0,
+            'ItemPicture': ''
         }
     )
     const imgRef = React.createRef()
@@ -59,7 +59,7 @@ const NewProduct = (props) => {
             setProductData({ ...productData, 'ItemPicture': file });
         }
     }
-    
+
     const handleLoad = () => {
         displayRef.current.style.display = 'block'
         window.URL.revokeObjectURL(displayRef.current.src)
@@ -85,12 +85,13 @@ const NewProduct = (props) => {
             formdata.append('pic', productData.ItemPicture);
             formdata.append('ItemID', res.ItemID);
             console.log(formdata)
-            const res2 = await sendImgPost('back_end/Image',formdata)
+            const res2 = await sendImgPost('back_end/Image', formdata)
             console.log(res2)
             // if(res2.)
             handleNotifyOpen(true)
             props.handleClose()
         }
+
 
     }
     const handleChange = (prop) => (event) => {

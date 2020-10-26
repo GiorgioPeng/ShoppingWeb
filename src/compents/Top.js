@@ -10,7 +10,10 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined';
 import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
-import Notify from './Notify'
+import Notify from './Notify';
+import CircularIndeterminate from './CircularIndeterminate';
+import Button from '@material-ui/core/Button'
+import sendPost from '../api/sendPost';
 // TODO 监控用户登陆情况
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +100,9 @@ const useStyles = makeStyles((theme) => ({
       top: '-50%',
       height: "200%"
     }
+  },
+  searchButton:{
+    marginLeft:theme.spacing(1)
   }
 }));
 
@@ -104,11 +110,22 @@ function Top(props) {
   const Link = props.link;
   const classes = useStyles();
   const [notifyOpen, setNotifyOpen] = React.useState(false)
+  const [inputText, setInputText] = React.useState('')
   const handleNotifyOpen = () => {
     if (!props.loginInfo)
       setNotifyOpen(true)
   }
-
+  const handleInput = (event)=>{
+    setInputText(event.target.value)
+  }
+  
+  const searchItems = async()=>{
+    setBackdropOpen(true)
+    const res = await sendPost('back_end/FindItem', 'ItemName='+inputText)
+    setBackdropOpen(false);
+    console.log(res)
+  }
+  const [backDropOpen, setBackdropOpen] = React.useState(false);
   const handleNotifyClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -129,13 +146,16 @@ function Top(props) {
             </div>
             <InputBase
               placeholder="Search…"
+              value={inputText}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              onChange={handleInput}
             />
           </div>
+          <Button onClick={searchItems} size="small" className={classes.searchButton} variant="contained" color='secondary'>Search</Button>
           <div className={classes.buttons}>
             <Link to="/">
               <span className={classes.buttonsText}>Home Page<HomeOutlinedIcon style={{ fontSize: 16 }} /></span>
@@ -163,6 +183,7 @@ function Top(props) {
         </Toolbar>
       </AppBar>
       <Notify open={notifyOpen} message={'请先登录'} type={'warning'} handleClose={handleNotifyClose} />
+      <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
     </div >
   );
 }
