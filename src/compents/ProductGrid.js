@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import SingleProduct from './SingleProduct'
-
+import changer from '../compents/ChangeImgUrl'
 import data from '../pages/index/tileData'
 // 用于展示多个商品
 const useStyles = makeStyles((theme) => ({
@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
         width:'80%',//到时候这里可以按照图片宽度的四倍设置
     },
 }));
-function ProductGrid() {
+function ProductGrid(props) {
+    const {itemData} = props
     const classes = useStyles();
 
     function FormRow() {
@@ -24,7 +25,7 @@ function ProductGrid() {
         return (
             <React.Fragment>
                 <Grid item xs={3}>
-                    <SingleProduct id={data[arr[0]].title} img={data[arr[0]].img}/>
+                    <SingleProduct id={data[arr[0]].title} img={itemData?changer(itemData[8].Picture):data[arr[0]].img}/>
                 </Grid>
                 <Grid item xs={3}>
                     <SingleProduct id={data[arr[1]].title} img={data[arr[1]].img}/>

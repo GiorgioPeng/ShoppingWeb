@@ -10,6 +10,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import sendPost from '../../api/sendPost'
 import Notify from '../../compents/Notify'
+import linkTo from '../../compents/LinkTo'
+import CircularIndeterminate from '../../compents/CircularIndeterminate'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: '10px auto',
@@ -30,10 +33,23 @@ const useStyles = makeStyles((theme) => ({
 
 function Index(props) {
     const classes = useStyles();
-    const [notifyOpen, setNotifyOpen] = React.useState(false);
 
-    const handleNotifyOpen = () => {
-        setNotifyOpen(true)
+    const [backDropOpen, setBackdropOpen] = React.useState(false);
+
+    const [notifyOpen, setNotifyOpen] = React.useState(
+        {
+            open:false,
+            message:''
+        }
+    );
+
+    const handleNotifyOpen = (message) => {
+        setNotifyOpen(
+            {
+                open:true,
+                message:message
+            }
+        )
     }
 
     const handleNotifyClose = (event, reason) => {
@@ -41,7 +57,12 @@ function Index(props) {
             return;
         }
 
-        setNotifyOpen(false);
+        setNotifyOpen(
+            {
+                open:false,
+                message:''
+            }
+            );
     };
     const [values, setValues] = React.useState({
         PhoneNumber: '',
@@ -52,13 +73,7 @@ function Index(props) {
         showPassword: false
     });
     const handleChange = (prop) => (event) => {
-        if (event.target.value.length >= 4 && prop === 'password') {
-            setValues({ ...values, [prop]: event.target.value, showButton: true });
-            return;
-        }
-        else {
-            setValues({ ...values, [prop]: event.target.value });
-        }
+        setValues({ ...values, [prop]: event.target.value });
     };
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
@@ -68,31 +83,26 @@ function Index(props) {
         event.preventDefault();
     };
 
-    const linkTo = (distination,b)=>{
-        let tempUrl = window.location.href.split('/')
-        tempUrl.pop()
-        tempUrl = tempUrl.join('/')
-        if(typeof b === 'function'){
-            b();
-        }
-        window.location.href = tempUrl + '/' + distination
-    }
-
     const handleSubmit = async () => {
+        setBackdropOpen(true)
         const data = `PhoneNumber=${values.PhoneNumber}&Name=${values.Name}&AccountName=${values.AccountName}&Password=${values.Password}&Deposit=${values.Deposit}`
         const res = await sendPost('back_end/regist', data)
+        setBackdropOpen(false)
         console.log(res)
         if (res.answer === 'true') {
-            // const data2 = `PhoneNumber=${values.PhoneNumber}&Password=${values.Password}`
-            // const res2 = await sendPost('back_end/Login', data2)
-            // //注册之后直接登陆
-            // if (res2.answer === 'true') {
-            //     linkTo('shoppingweb', () => { props.setLoginInfo(res) })
-            // }
+            const data2 = `PhoneNumber=${values.PhoneNumber}&Password=${values.Password}`
+            const res2 = await sendPost('back_end/Login', data2)
+            //注册之后直接登陆
+            if (res2.answer === 'true') {
+                linkTo('shoppingweb', () => { props.setLoginInfo(res2.AccountInformation[0]) })
+            }
             console.log('注册成功')
         }
+        if (res.answer === 'exist') {
+            handleNotifyOpen('该手机号已经注册');
+        }
         else {
-            handleNotifyOpen();
+            handleNotifyOpen('请检查各项输入格式');
         }
     }
     return (
@@ -178,7 +188,8 @@ function Index(props) {
                 />
             </FormControl>
             <Button onClick={handleSubmit} color='secondary' variant='contained'>确认注册</Button>
-            <Notify open={notifyOpen} message={'请检查各项格式'} type={'error'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen.open} message={notifyOpen.message} type={'error'} handleClose={handleNotifyClose} />
+            <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
         </div>
     )
 }

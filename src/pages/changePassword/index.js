@@ -12,6 +12,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import sendPost from '../../api/sendPost'
 import Notify from '../../compents/Notify'
+import linkTo from '../../compents/LinkTo'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -127,15 +128,6 @@ function Index(props) {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-    const linkTo = (distination, b) => {
-        let tempUrl = window.location.href.split('/')
-        tempUrl.pop()
-        tempUrl = tempUrl.join('/')
-        if (typeof b === 'function') {
-            b();
-        }
-        window.location.href = tempUrl + '/' + distination
-    }
 
     return (
         <div className={classes.root}>

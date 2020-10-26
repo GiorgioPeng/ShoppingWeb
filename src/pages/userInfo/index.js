@@ -8,6 +8,7 @@ import ButtonBase from '@material-ui/core/ButtonBase'
 import BuyerListProducts from './BuyerListProducts'
 import SellerListProducts from './SellerListProducts'
 import Button from '@material-ui/core/Button'
+import linkTo from '../../compents/LinkTo'
 // 这个页面用来展示用户的一些数据, 比如交易记录
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,15 +40,6 @@ const useBaseInfoStyles = makeStyles((theme) => ({
 function BaseInfo(props) {
   const classes = useBaseInfoStyles();
   const {loginInfo} = props
-  const linkTo = (distination,b)=>{
-      let tempUrl = window.location.href.split('/')
-      tempUrl.pop()
-      tempUrl = tempUrl.join('/')
-      if(typeof b === 'function'){
-          b();
-      }
-      window.location.href = tempUrl + '/' + distination
-  }
   return (
     <Grid container spacing={3}>
       <Grid item>
@@ -69,7 +61,15 @@ function BaseInfo(props) {
       </Typography>
       </Grid>
       <Grid container item xs={7}>
-        <Grid item xs={8}></Grid>
+        <Grid item xs={8}>
+        <Typography
+            color="textPrimary"
+            variant='subtitle1'
+            align="right"
+          >
+            Deposit: ${loginInfo.Deposit}
+          </Typography>
+        </Grid>
         <Grid item xs={4}>
           <Typography
             color="textSecondary"
@@ -77,7 +77,7 @@ function BaseInfo(props) {
             align="right"
           >
             Tel: {loginInfo.PhoneNumber}
-            </Typography>
+          </Typography>
 
           <Button onClick={()=>linkTo('changepassword')} color="secondary">修改密码</Button>
         </Grid>

@@ -79,7 +79,7 @@ function App() {
                 )
             } />
           <Route path="/login" component={() => (<Login setLoginInfo={setLoginInfo} />)} />
-          <Route path="/register" component={Register} />
+          <Route path="/register" component={() => (<Register setLoginInfo={setLoginInfo} />)}/>
           <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Redirect to="/shoppingweb"></Redirect>
         </Switch>

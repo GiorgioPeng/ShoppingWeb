@@ -1,6 +1,10 @@
 import url from './baseUrl'
-const sendGet = (postfix, data) => {
-    const responded = await fetch(url + postfix + '?' + data, {
+const sendGet = async (postfix, data) => {
+    let des = url + postfix
+    if (data) {
+        des += '?' + data
+    }
+    const responded = await fetch(des, {
         cache: 'no-cache',
         credentials: 'include',
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
