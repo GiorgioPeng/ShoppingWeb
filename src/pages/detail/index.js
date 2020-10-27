@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import tileData from '../index/tileData'
+import sendPost from '../../api/sendPost'
 // 这个页面用来展示商品的详情信息, 比如淘宝点击进去一个鞋子,可以进行选择大小
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,8 +58,17 @@ function Index(props) {
     setOpen(false);
   };
 
+  React.useEffect(()=>{
+    const getItemInfo = async()=>{
+      const data = `ItemID=${id}`
+      const res = await sendPost('/back_end/OneItem',data)
+      console.log(res)
+      setProduct(res)
+    }
+    getItemInfo()
+  },[])
+
   React.useEffect(() => {
-    console.log('hello')
     setIdentify(id)
     setProduct(tileData.filter((e) => e.title === identify)[0])
   }, [identify,id])
@@ -69,7 +79,7 @@ function Index(props) {
 
           <Grid item>
             <ButtonBase disabled className={classes.image}>
-              <img className={classes.img} alt="complex" src={product?.img} />
+              <img className={classes.img} alt="complex" src={product?.ItemPicture} />
             </ButtonBase>
           </Grid>
 
@@ -81,14 +91,9 @@ function Index(props) {
                   {product?.title}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                  here is the description of the product.
-                  here is the description of the product.
-                  here is the description of the product.
-                  here is the description of the product.
-                  here is the description of the product.
-                  here is the description of the product.
-                  here is the description of the product.
-                  here is the description of the product.
+                  {
+                    product?.ItemDescription
+                  }
                 </Typography>
                 <TextField
                   label="Quantity"
@@ -101,14 +106,14 @@ function Index(props) {
                   type="number"
                   onChange={(e)=>{
                     if(e.target.value>=0)
-                      setSumPrice(e.target.value*10000)
+                      setSumPrice(e.target.value*product?product.ItemPrice:0)
                     else{
                       e.target.value = 0
                     }
                   }}
                 />
                 <Typography variant="subtitle1" color='error'>
-                  单个价格: ¥10000
+                  单个价格: ${product?.ItemPrice}
                 </Typography>
                 <br/>
                 <br/>

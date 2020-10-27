@@ -67,7 +67,7 @@ function SingleProduct(props) {
             }, 1500)
         }, 10, scrollTop)
     }
-    // 点击商品 TODO
+    // 点击商品(信息获取在detail组件里)
     const handleProduct = (event) => {
         console.log(event.target)
         console.log(event.target.getAttribute('identify'))
