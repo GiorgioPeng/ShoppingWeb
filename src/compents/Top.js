@@ -108,6 +108,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Top(props) {
   const Link = props.link;
+  const setItemData = props.setItemData
   const classes = useStyles();
   const [notifyOpen, setNotifyOpen] = React.useState(false)
   const [inputText, setInputText] = React.useState('')
@@ -122,8 +123,9 @@ function Top(props) {
   const searchItems = async()=>{
     setBackdropOpen(true)
     const res = await sendPost('back_end/FindItem', 'ItemName='+inputText)
+    setItemData(res.Item)
     setBackdropOpen(false);
-    console.log(res)
+    console.log(res.Item)
   }
   const [backDropOpen, setBackdropOpen] = React.useState(false);
   const handleNotifyClose = (event, reason) => {

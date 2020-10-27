@@ -8,16 +8,22 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import StarRateIcon from '@material-ui/icons/StarRate';
 import IconButton from '@material-ui/core/IconButton';
+import sendPost from '../api/sendPost'
 // 用于显示单个商品的卡片
 // TODO 一般而言需要接受父组件传过来的数据
 const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 280,
+        height:'300px',
         padding: theme.spacing(2),
         // transform:'scale(0.8)',
         '&:hover': {
             outline: 'red 1px solid'
         },
+    },
+    description:{
+        height:'30px',
+        overflow:'scroll'
     },
     text: {
         display: 'flex',
@@ -30,6 +36,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 function SingleProduct(props) {
     const classes = useStyles();
+    const {img,ItemID,name,price,description,quantity,type} = props
+    const star = async ( )=> {
+        const data = `ItemID=${ItemID}`
+        const res = await sendPost('/back_end/Like',data)
+        if(res.answer==='true'){
+            console.log('收藏成功')
+        }
+    }
 
     // 点击收藏的动画
     const handleStar = (e) => {
@@ -47,12 +61,13 @@ function SingleProduct(props) {
         setTimeout((position) => {
             temp.style.top = `${position}px`
             temp.style.left = `95vw`
+            star()
             setTimeout(() => {
                 document.body.removeChild(temp)
             }, 1500)
         }, 10, scrollTop)
     }
-    // 点击商品
+    // 点击商品 TODO
     const handleProduct = (event) => {
         console.log(event.target)
         console.log(event.target.getAttribute('identify'))
@@ -68,24 +83,24 @@ function SingleProduct(props) {
             <CardActionArea onClick={handleProduct}>
                 <CardMedia
                     component="img"
-                    alt="Contemplative Reptile"
+                    alt={name}
                     height="180"
-                    image={props.img}
-                    title="Contemplative Reptile"
-                    identify = {props.id}
+                    image={img}
+                    title={name}
+                    identify = {ItemID}
                 />
             </CardActionArea>
 
-            <CardContent>
+            <CardContent className={classes.description}>
                     <Typography align='left' variant="body2" color="textSecondary" component="p">
-                        here is the description of the products.
+                        {description}
                     </Typography>
                 </CardContent>
             <CardActions className={classes.text}>
                 <Typography variant="overline" className={classes.price}>
                     ¥
                     <Typography variant='h4'>
-                        {parseInt(Math.random() * 100)}
+                        {price}
                     </Typography>
                 </Typography>
                 <IconButton aria-label="delete" onClick={handleStar} className={classes.margin}>

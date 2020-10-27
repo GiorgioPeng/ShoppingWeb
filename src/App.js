@@ -21,15 +21,23 @@ import ChangePassword from './pages/changePassword'
 
 function App() {
   const [loginInfo, setLoginInfo] = React.useState(null)
+
+  const [itemData, setItemData] = React.useState([])
+
   React.useEffect(() => {
     console.log(loginInfo)
   }, [loginInfo])
+
   return (
     <div className="App">
       <Router>
-        <Top link={Link} loginInfo={loginInfo} />
+        <Top link={Link} setItemData={setItemData} loginInfo={loginInfo} />
         <Switch>
-          <Route path="/shoppingweb" exact component={Index}></Route>
+          <Route path="/shoppingweb" exact
+            render={() =>
+              <Index itemData={itemData} setItemData={setItemData}></Index>
+            }
+          ></Route>
           <Route path="/shoppingcar"
             render={() =>
               loginInfo ? (
@@ -79,13 +87,13 @@ function App() {
                 )
             } />
           <Route path="/login" component={() => (<Login setLoginInfo={setLoginInfo} />)} />
-          <Route path="/register" component={() => (<Register setLoginInfo={setLoginInfo} />)}/>
+          <Route path="/register" component={() => (<Register setLoginInfo={setLoginInfo} />)} />
           <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Redirect to="/shoppingweb"></Redirect>
         </Switch>
 
       </Router>
-    </div>
+    </div >
   );
 }
 

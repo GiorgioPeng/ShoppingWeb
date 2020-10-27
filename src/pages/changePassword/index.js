@@ -94,6 +94,7 @@ function Index(props) {
         showPassword: false,
     });
     const [notifyOpen, setNotifyOpen] = React.useState(false);
+    const [notifyOpen2, setNotifyOpen2] = React.useState(false);
 
     const handleNotifyOpen = () => {
         setNotifyOpen(true)
@@ -106,12 +107,25 @@ function Index(props) {
 
         setNotifyOpen(false);
     };
+
+    const handleNotifyOpen2 = () => {
+        setNotifyOpen2(true)
+    }
+
+    const handleNotifyClose2 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setNotifyOpen2(false);
+    };
     const submit = async () => {
         const data = `OldPassword=${values.OldPassword}&NewPassword=${values.NewPassword}`
-        const res = await sendPost('back_end/ChangePassword', data)
+        const res = await sendPost('/back_end/ChangePassword', data)
         console.log(res)
         if (res.answer === 'true') {
-            linkTo('shoppingweb', () => { props.setLoginInfo(res) })
+            handleNotifyOpen2()
+            setTimeout(()=>linkTo('login'),1500)
         }
         else {
             handleNotifyOpen();
@@ -208,6 +222,7 @@ function Index(props) {
                 </div>
             </div>
             <Notify open={notifyOpen} message={'密码错误'} type={'error'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen2} message={'修改密码成功'} type={'success'} handleClose={handleNotifyClose2} />
         </div>
     )
 }
