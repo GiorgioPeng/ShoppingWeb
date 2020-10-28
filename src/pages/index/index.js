@@ -9,7 +9,7 @@ function Index(props) {
 
     const [backDropOpen, setBackdropOpen] = React.useState(false);
 
-    const {itemData, setItemData} = props
+    const {itemData, setItemData, loginInfo} = props
 
     React.useEffect(() => {
         const getProductsInfo = async () => {
@@ -33,7 +33,7 @@ function Index(props) {
         <div>
             <Kind />
             {/* <TodayRecommand /> */}
-            <ProductGrid itemData={itemData} />
+            <ProductGrid loginInfo={loginInfo} itemData={itemData} />
             <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
         </div>
     )

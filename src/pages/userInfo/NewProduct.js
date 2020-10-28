@@ -65,6 +65,7 @@ const NewProduct = (props) => {
         window.URL.revokeObjectURL(displayRef.current.src)
     }
     const [notifyOpen, setNotifyOpen] = React.useState(false)
+    const [notifyOpen2, setNotifyOpen2] = React.useState(false)
     const handleNotifyOpen = () => {
         setNotifyOpen(true)
     }
@@ -76,20 +77,47 @@ const NewProduct = (props) => {
 
         setNotifyOpen(false);
     };
+    const handleNotifyOpen2 = () => {
+        setNotifyOpen2(true)
+    }
+
+    const handleNotifyClose2 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setNotifyOpen2(false);
+    };
     const ensurePublish = async () => {
-        const data = `ItemName=${productData.ItemName}&ItemType=${productData.ItemType}&ItemPrice=${productData.ItemPrice}&ItemDescription=${productData.ItemDescription}&ItemQuantity=${productData.ItemQuantity}`
-        const res = await sendPost('back_end/add', data)
-        console.log(res)
-        if (res.ItemID !== 'false') {
-            const formdata = new FormData();
-            formdata.append('pic', productData.ItemPicture);
-            formdata.append('ItemID', res.ItemID);
-            console.log(formdata)
-            const res2 = await sendImgPost('back_end/Image', formdata)
-            console.log(res2)
-            // if(res2.)
-            handleNotifyOpen(true)
-            props.handleClose()
+        console.log(productData.ItemPicture)
+        if (productData.ItemPicture) {
+            const data = `ItemName=${productData.ItemName}&ItemType=${productData.ItemType}&ItemPrice=${productData.ItemPrice}&ItemDescription=${productData.ItemDescription}&ItemQuantity=${productData.ItemQuantity}`
+            const res = await sendPost('back_end/add', data)
+            console.log(res)
+            if (res.ItemID !== 'false') {
+                const formdata = new FormData();
+                formdata.append('pic', productData.ItemPicture);
+                formdata.append('ItemID', res.ItemID);
+                console.log(formdata)
+                const res2 = await sendImgPost('back_end/Image', formdata)
+                console.log(res2)
+                // if(res2.)
+                handleNotifyOpen()
+                props.handleClose()
+                setProductData(
+                    {
+                        'ItemName': '',
+                        'ItemPrice': 0,
+                        'ItemType': '',
+                        'ItemDescription': '',
+                        'ItemQuantity': 0,
+                        'ItemPicture': ''
+                    }
+                )
+            }
+        }
+        else {
+            handleNotifyOpen2()
         }
 
 
@@ -161,6 +189,7 @@ const NewProduct = (props) => {
                 </DialogContent>
             </Dialog>
             <Notify open={notifyOpen} message={'发布成功'} type={'success'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen2} message={'请上传图片'} type={'error'} handleClose={handleNotifyClose2} />
         </div>
     )
 }

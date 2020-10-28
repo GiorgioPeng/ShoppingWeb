@@ -30,7 +30,7 @@ function Index(props) {
     return (
         <div className={classes.root}>
             <Typography variant="h4">Star List</Typography>
-            <StarList />
+            <StarList starList={starList}/>
         </div>
     )
 }

@@ -8,7 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button'
+import Button from '@material-ui/core/Button';
+import changer from '../../compents/ChangeImgUrl'
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,19 +23,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function createData(name, img, price, count, date) {
-    return { name, img, price, count, date };
-}
 
-const rows = [
-    createData('高的钱包', `${process.env.PUBLIC_URL}/book.png`, 6.0, 24, '2020-13-32'),
-    createData('高的💻', `${process.env.PUBLIC_URL}/digital.png`, 9.0, 37, '2020-13-32'),
-    createData('高的女友', `${process.env.PUBLIC_URL}/baby.png`, 16.0, 24, '2020-13-32'),
-    createData('高的🏠', `${process.env.PUBLIC_URL}/house.png`, 3.7, 67, '2020-13-32'),
-    createData('高的美食', `${process.env.PUBLIC_URL}/snack.png`, 16.0, 49, '2020-13-32'),
-];
-
-function ListProducts() {
+function ListProducts(props) {
+    const {starList} = props
     const classes = useStyles();
 
     return (
@@ -47,26 +38,28 @@ function ListProducts() {
                             <TableCell align="left">商品图片</TableCell>
                             <TableCell align="right">商品价格</TableCell>
                             <TableCell align="right">数量</TableCell>
+                            <TableCell align="right">类型</TableCell>
                             <TableCell align="right"> </TableCell>
                             <TableCell align="right"> </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow hover className={classes.item} key={row.name}>
+                        {starList?.map((row) => (
+                            <TableRow hover className={classes.item} key={row.ItemID}>
                                 <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {row.ItemName}
                                 </TableCell>
                                 <TableCell align="left">
                                     <Avatar
                                         className={classes.large}
                                         alt='user'
                                         variant="square"
-                                        src={row.img}
+                                        src={changer(row.Picture)}
                                     />
                                 </TableCell>
-                                <TableCell align="right">¥{row.price}</TableCell>
-                                <TableCell align="right">{row.count}</TableCell>
+                                <TableCell align="right">${row.ItemPrice}</TableCell>
+                                <TableCell align="right">{row.ItemQuantity}</TableCell>
+                                <TableCell align="right">{row.ItemType}</TableCell>
                                 <TableCell align="right">
                                     <Button variant="contained">加入购物车</Button>
                                 </TableCell>

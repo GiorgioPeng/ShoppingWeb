@@ -130,8 +130,8 @@ function Index(props) {
         // const url = 'http://47.103.207.168:8081/back_end/Login'
         // PhoneNumber=15288850612&password=123456
         setBackdropOpen(true)
-        // const data = `PhoneNumber=${values.PhoneNumber}&Password=${encrypt(values.password)}`
-        const data = `PhoneNumber=${values.PhoneNumber}&Password=${values.password}`
+        const data = `PhoneNumber=${values.PhoneNumber}&Password=${encrypt(values.password)}`
+        // const data = `PhoneNumber=${values.PhoneNumber}&Password=${values.password}`
         const res = await sendLoginPost('/back_end/Login', data)
         setBackdropOpen(false);
         console.log(res)

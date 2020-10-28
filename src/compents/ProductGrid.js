@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import SingleProduct from './SingleProduct'
 import changer from '../compents/ChangeImgUrl'
-import data from '../pages/index/tileData'
+// import data from '../pages/index/tileData'
 // 用于展示多个商品
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const CreateItem = (props) => {
-    const { itemData } = props
+    const { itemData,loginInfo } = props
     let tempArr = []
     let i = 0;
     let tempTempArr = []
@@ -49,6 +49,7 @@ const CreateItem = (props) => {
                                                 description={e.ItemDescription}
                                                 quantity={e.ItemQuantity}
                                                 type={e.ItemType}
+                                                loginInfo={loginInfo}
                                             />
                                         </Grid>
                                     )
@@ -64,36 +65,14 @@ const CreateItem = (props) => {
 
 
 function ProductGrid(props) {
-    const { itemData } = props
+    const { itemData,loginInfo } = props
     const classes = useStyles();
-
-    function FormRow() {
-        const arr = []
-        for (let i = 0; i < 4; i++)
-            arr.push(parseInt(data.length * Math.random()))
-        return (
-            <React.Fragment>
-                <Grid item xs={3}>
-                    <SingleProduct id={data[arr[0]].title} img={itemData ? changer(itemData[8].Picture) : data[arr[0]].img} />
-                </Grid>
-                <Grid item xs={3}>
-                    <SingleProduct id={data[arr[1]].title} img={data[arr[1]].img} />
-                </Grid>
-                <Grid item xs={3}>
-                    <SingleProduct id={data[arr[2]].title} img={data[arr[2]].img} />
-                </Grid>
-                <Grid item xs={3}>
-                    <SingleProduct id={data[arr[3]].title} img={data[arr[3]].img} />
-                </Grid>
-            </React.Fragment>
-        );
-    }
 
     return (
         <div className={classes.root}>
             {
                 itemData != null ?
-                    <CreateItem itemData={itemData} />
+                    <CreateItem loginInfo={loginInfo} itemData={itemData} />
                     :
                     ''
             }

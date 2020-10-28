@@ -15,7 +15,8 @@ function CircularIndeterminate(props) {
     const classes = useCircularIndeterminateStyles();
   
     return (
-    <Backdrop className={classes.backdrop} open={props.backDropOpen} onClick={props.handle}>
+    // <Backdrop className={classes.backdrop} open={props.backDropOpen} onClick={props.handle}>
+      <Backdrop className={classes.backdrop} open={props.backDropOpen}>
         <CircularProgress color="inherit" />
       </Backdrop>
     );

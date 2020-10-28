@@ -35,7 +35,7 @@ function App() {
         <Switch>
           <Route path="/shoppingweb" exact
             render={() =>
-              <Index itemData={itemData} setItemData={setItemData}></Index>
+              <Index itemData={itemData} loginInfo={loginInfo} setItemData={setItemData}></Index>
             }
           ></Route>
           <Route path="/shoppingcar"
