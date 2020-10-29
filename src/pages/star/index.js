@@ -14,7 +14,7 @@ const useStyle = makeStyles(theme => ({
 function Index(props) {
     const { loginInfo } = props;
     const classes = useStyle()
-    const [starList,setStarList] = React.useState(null)
+    const [starList,setStarList] = React.useState([])
     React.useEffect(() => {
         const getStarList = async () => {
             if (loginInfo) {

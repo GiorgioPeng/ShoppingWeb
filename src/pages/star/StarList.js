@@ -9,7 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import changer from '../../compents/ChangeImgUrl'
+import changer from '../../compents/ChangeImgUrl';
+import sendPost from '../../api/sendPost'
+import linkTo from '../../compents/LinkTo'
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
 function ListProducts(props) {
     const { starList } = props
     const classes = useStyles();
+
+    const dislike = async(item)=>{
+        const res = await sendPost("/back_end_war_exploded/Dislike",`ItemID=${item.ItemID}`)
+        linkTo('shoppingweb')
+        console.log(res)
+    }
 
     return (
         <div className={classes.root}>
@@ -65,7 +73,7 @@ function ListProducts(props) {
                                         <Button variant="contained">加入购物车</Button>
                                     </TableCell>
                                     <TableCell>
-                                        <Button variant="contained" color='secondary'>删除</Button>
+                                        <Button variant="contained" color='secondary' onClick={()=>dislike(row)}>删除</Button>
                                     </TableCell>
                                 </TableRow>
                             ))

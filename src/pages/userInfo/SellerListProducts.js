@@ -11,6 +11,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import NewProduct from './NewProduct'
 import changer from '../../compents/ChangeImgUrl';
+import sendPost from '../../api/sendPost';
+import linkTo from '../../compents/LinkTo';
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,6 +73,12 @@ function ListProducts(props) {
         setOpen(true);
     }
 
+    const deleteItem = async (item)=>{
+        const res = await sendPost('/back_end_war_exploded/DeleteItem',`ItemID=${item.ItemID}`)
+        linkTo('shoppingweb')
+        console.log(res)
+    }
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -109,7 +117,7 @@ function ListProducts(props) {
                                     <TableCell align="right">{row.ItemType}</TableCell>
                                     {/* <TableCell align="right">{row.date}</TableCell> */}
                                     <TableCell align="right">
-                                        <Button color='secondary'>取消售卖</Button>
+                                        <Button color='secondary' onClick={()=>deleteItem(row)}>取消售卖</Button>
                                     </TableCell>
                                     <TableCell align="right">
                                         <Button color='primary' onClick={() => modifyProduct(row)}>设置商品属性</Button>
