@@ -6,8 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField';
-import Snackbar from '@material-ui/core/Snackbar';
-// import tileData from '../index/tileData'
+import Notify from '../../compents/Notify'
 import CircularIndeterminate from '../../compents/CircularIndeterminate'
 import sendPost from '../../api/sendPost'
 import changer from '../../compents/ChangeImgUrl'
@@ -46,24 +45,41 @@ function Index(props) {
   const id = props.match.params.identify
   const [identify, setIdentify] = React.useState('');
   const [product, setProduct] = React.useState(null)
-  const [sumPrice, setSumPrice] = React.useState(10000)
-  const [open, setOpen] = React.useState(false);
+  const [sumPrice, setSumPrice] = React.useState(0)
+  const [notifyOpen, setNotifyOpen] = React.useState(false);
+  const [notifyOpen2, setNotifyOpen2] = React.useState(false);
+  const [notifyOpen3, setNotifyOpen3] = React.useState(false);
   const [backDropOpen, setBackdropOpen] = React.useState(false);
+  const [quantity, setQuantity] = React.useState(0)
   const handleClick = () => {
-    setOpen(true);
+    setNotifyOpen(true);
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
+
+  const handleNotifyClose = ()=>{
+    setNotifyOpen(false)
+  }
+
+
+  const handleNotifyClose2 = ()=>{
+    setNotifyOpen2(false)
+  }
+
+
+  const handleNotifyClose3 = ()=>{
+    setNotifyOpen3(false)
+  }
 
   const buy = async () => {
-    // const data = `ItemID=${id}`
-    // const res = await sendPost('/back_end_war_exploded/OneItem', data)
-    // console.log(res)
+    const data = `ItemID=${id}&ItemQuantity=${quantity}`
+    const res = await sendPost('/back_end_war_exploded/Purchase', data)
+    console.log(res)
+    if(res.answer==='true'){
+      setNotifyOpen2(true)
+    }
+    else{
+      setNotifyOpen3(true)
+    }
     // setProduct(res)
   }
 
@@ -90,7 +106,7 @@ function Index(props) {
 
           <Grid item>
             <ButtonBase disabled className={classes.image}>
-              <img className={classes.img} alt="complex" src={product?changer(product.ItemPicture):''} />
+              <img className={classes.img} alt="complex" src={product ? changer(product.ItemPicture) : ''} />
             </ButtonBase>
           </Grid>
 
@@ -99,7 +115,7 @@ function Index(props) {
 
               <Grid item xs>
                 <Typography gutterBottom variant="h4">
-                  {product?.title}
+                  {product?.ItemName}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
                   {
@@ -109,7 +125,7 @@ function Index(props) {
                 <TextField
                   label="Quantity"
                   id="quantity"
-                  defaultValue="1"
+                  defaultValue="0"
                   className={classes.textField}
                   helperText="Purchase quantity"
                   margin="normal"
@@ -117,10 +133,11 @@ function Index(props) {
                   type="number"
                   onChange={(e) => {
                     if (e.target.value >= 0)
-                      setSumPrice(e.target.value * product ? product.ItemPrice : 0)
+                      setSumPrice(e.target.value * (product ? product.ItemPrice : 0))
                     else {
                       e.target.value = 0
                     }
+                    setQuantity(e.target.value)
                   }}
                 />
                 <Typography variant="subtitle1" color='error'>
@@ -152,8 +169,10 @@ function Index(props) {
           </Grid>
         </Grid>
       </Paper>
-      <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
-      <Snackbar open={open} message="加入购物车成功!" autoHideDuration={500} onClose={handleClose} />
+      <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
+      <Notify open={notifyOpen} message={'加入购物车成功!'} type={'success'} handleClose={handleNotifyClose} />
+      <Notify open={notifyOpen2} message={'购买成功!'} type={'success'} handleClose={handleNotifyClose2} />
+      <Notify open={notifyOpen3} message={'购买失败!'} type={'error'} handleClose={handleNotifyClose3} />
     </div>
   );
 }

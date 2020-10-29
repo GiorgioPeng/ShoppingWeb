@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import changer from '../../compents/ChangeImgUrl';
+import sendPost from '../../api/sendPost'
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,6 +27,22 @@ const useStyles = makeStyles((theme) => ({
 function ListProducts(props) {
     const classes = useStyles();
     const { buyList } = props;
+    const [refund, setRefund] = React.useState([])
+    const [transportState, setTransportState] = React.useState([])
+    React.useEffect(() => {
+        const getProductInfo = async (itemID) => {
+            const res = await sendPost('/back_end_war_exploded/Refund', `ItemID=${itemID}`)
+            const res2 = await sendPost('/back_end_war_exploded/TransportState', `ItemID=${itemID}`)
+            // return [res.answer, res2.answer]
+            // TODO
+        }
+        if (buyList && buyList.length !== 0) {
+            for (let i of buyList) {
+                getProductInfo(i)
+                // TODO
+            }
+        }
+    }, [buyList])
     return (
         <div className={classes.root}>
             <TableContainer component={Paper}>

@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import sendPost from '../../api/sendPost'
 import Notify from '../../compents/Notify'
+import encrypt from '../../compents/Encrypt'
 import linkTo from '../../compents/LinkTo'
 import CircularIndeterminate from '../../compents/CircularIndeterminate'
 
@@ -85,12 +86,12 @@ function Index(props) {
 
     const handleSubmit = async () => {
         setBackdropOpen(true)
-        const data = `PhoneNumber=${values.PhoneNumber}&Name=${values.Name}&AccountName=${values.AccountName}&Password=${values.Password}&Deposit=${values.Deposit}`
+        const data = `PhoneNumber=${values.PhoneNumber}&Name=${values.Name}&AccountName=${values.AccountName}&Password=${encrypt(values.Password)}&Deposit=${values.Deposit}`
         const res = await sendPost('back_end_war_exploded/regist', data)
         setBackdropOpen(false)
         console.log(res)
         if (res.answer === 'true') {
-            const data2 = `PhoneNumber=${values.PhoneNumber}&Password=${values.Password}`
+            const data2 = `PhoneNumber=${values.PhoneNumber}&Password=${encrypt(values.Password)}`
             const res2 = await sendPost('back_end_war_exploded/Login', data2)
             //注册之后直接登陆
             if (res2.answer === 'true') {
