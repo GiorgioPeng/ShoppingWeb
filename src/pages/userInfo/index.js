@@ -41,7 +41,7 @@ const useBaseInfoStyles = makeStyles((theme) => ({
 
 function BaseInfo(props) {
   const classes = useBaseInfoStyles();
-  const {loginInfo} = props
+  const { loginInfo } = props
   return (
     <Grid container spacing={3}>
       <Grid item>
@@ -60,11 +60,11 @@ function BaseInfo(props) {
           variant='h6'
         >
           {loginInfo.AccountName}
-      </Typography>
+        </Typography>
       </Grid>
       <Grid container item xs={7}>
         <Grid item xs={8}>
-        <Typography
+          <Typography
             color="textPrimary"
             variant='subtitle1'
             align="right"
@@ -81,7 +81,7 @@ function BaseInfo(props) {
             Tel: {loginInfo.PhoneNumber}
           </Typography>
 
-          <Button onClick={()=>linkTo('changepassword')} color="secondary">修改密码</Button>
+          <Button onClick={() => linkTo('changepassword')} color="secondary">修改密码</Button>
         </Grid>
       </Grid>
     </Grid>)
@@ -90,25 +90,30 @@ function BaseInfo(props) {
 function Index(props) {
   const classes = useStyles();
   const [backDropOpen, setBackdropOpen] = React.useState(false);
+  const [sellList, setSellList] = React.useState([])
+  const [buyList, setBuyList] = React.useState([])
+  React.useEffect(() => {
+    const getInfo = async () => {
+      setBackdropOpen(true)
+      const res = await sendPost('back_end_war_exploded/MyAllItem')
+      console.log('MyAllItem')
+      console.log(res)
+      setSellList(res.Item)
 
-  React.useEffect(()=>{
-    const getProductsInfo = async ()=> {
-        setBackdropOpen(true)
-        const res = await sendPost('back_end/MyAllItem')
-        console.log('MyAllItem')
-        console.log(res)
-        // if(res){
-        //     setItemData(res.Item)
-        // }
-        setBackdropOpen(false)
+      const res2 = await sendPost('back_end_war_exploded/PurchaseInformation')
+      console.log('PurchaseInformation')
+      console.log(res2)
+      setBuyList(res2.Item)
+
+      setBackdropOpen(false)
     }
-    getProductsInfo()
-},[])
+    getInfo()
+  }, [])
   return (
     <div className={classes.root}>
-      <BaseInfo loginInfo={props.loginInfo}/>
+      <BaseInfo loginInfo={props.loginInfo} />
       <Divider />
-      <BuyerListProducts loginInfo={props.loginInfo}/>
+      <BuyerListProducts buyList={buyList} />
       <Divider />
       <Divider />
       <Divider />
@@ -116,8 +121,8 @@ function Index(props) {
       <Typography variant="subtitle1" color="textSecondary">
         发布的商品
       </Typography>
-      <SellerListProducts loginInfo={props.loginInfo}/>
-      <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
+      <SellerListProducts sellList={sellList} />
+      <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
     </div>
   );
 }

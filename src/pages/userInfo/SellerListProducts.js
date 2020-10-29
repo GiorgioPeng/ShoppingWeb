@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import NewProduct from './NewProduct'
-
+import changer from '../../compents/ChangeImgUrl';
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,25 +28,48 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function createData(name, img, price, count, date) {
-    return { name, img, price, count, date };
-}
-
-const rows = [
-    createData('高的钱包', `${process.env.PUBLIC_URL}/book.png`, 6.0, 24, '2020-13-32'),
-    createData('高的💻', `${process.env.PUBLIC_URL}/digital.png`, 9.0, 37, '2020-13-32'),
-    createData('高的女友', `${process.env.PUBLIC_URL}/baby.png`, 16.0, 24, '2020-13-32'),
-    createData('高的🏠', `${process.env.PUBLIC_URL}/house.png`, 3.7, 67, '2020-13-32'),
-    createData('高的美食', `${process.env.PUBLIC_URL}/snack.png`, 16.0, 49, '2020-13-32'),
-];
-
-
-function ListProducts() {
+function ListProducts(props) {
     const classes = useStyles();
+    const { sellList } = props;
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
+        // 每次发布新商品的时候需要重置一下表单
+        setProductData({
+            'ItemID': '',
+            'ItemName': '',
+            'ItemPrice': 0,
+            'ItemType': '',
+            'ItemDescription': '',
+            'ItemQuantity': 0,
+            'ItemPicture': ''
+        })
         setOpen(true);
     };
+
+    const [productData, setProductData] = React.useState(
+        {
+            'ItemID': '',
+            'ItemName': '',
+            'ItemPrice': 0,
+            'ItemType': '',
+            'ItemDescription': '',
+            'ItemQuantity': 0,
+            'ItemPicture': ''
+        }
+    )
+
+    const modifyProduct = (item) => {
+        setProductData({
+            'ItemID': item.ItemID,
+            'ItemName': item.ItemName,
+            'ItemPrice': item.ItemPrice,
+            'ItemType': item.ItemType,
+            'ItemDescription': item.ItemDescription,
+            'ItemQuantity': item.ItemQuantity,
+            'ItemPicture': ''
+        })
+        setOpen(true);
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -61,41 +84,46 @@ function ListProducts() {
                             <TableCell align="left">商品图片</TableCell>
                             <TableCell align="right">商品价格</TableCell>
                             <TableCell align="right">剩余数量</TableCell>
-                            <TableCell align="right">发布日期</TableCell>
+                            <TableCell align="right">商品类型</TableCell>
                             <TableCell align="right"> </TableCell>
                             <TableCell align="right"> </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow hover className={classes.item} key={row.name}>
-                                <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="left">
-                                    <Avatar
-                                        className={classes.large}
-                                        alt='user'
-                                        variant="square"
-                                        src={row.img}
-                                    />
-                                </TableCell>
-                                <TableCell align="right">¥{row.price}</TableCell>
-                                <TableCell align="right">{row.count}</TableCell>
-                                <TableCell align="right">{row.date}</TableCell>
-                                <TableCell align="right">
-                                    <Button color='secondary'>取消售卖</Button>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Button color='primary'>设置商品属性</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {sellList.length !== 0 ?
+                            sellList.map((row) => (
+                                <TableRow hover className={classes.item} key={row.ItemID}>
+                                    <TableCell component="th" scope="row">
+                                        {row.ItemName}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <Avatar
+                                            className={classes.large}
+                                            alt='user'
+                                            variant="square"
+                                            src={changer(row.Picture)}
+                                        />
+                                    </TableCell>
+                                    <TableCell align="right">${row.ItemPrice}</TableCell>
+                                    <TableCell align="right">{row.ItemQuantity}</TableCell>
+                                    <TableCell align="right">{row.ItemType}</TableCell>
+                                    {/* <TableCell align="right">{row.date}</TableCell> */}
+                                    <TableCell align="right">
+                                        <Button color='secondary'>取消售卖</Button>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Button color='primary' onClick={() => modifyProduct(row)}>设置商品属性</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                            :
+                            <p>您还未发布任何商品</p>
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>
             <Button variant="contained" onClick={handleClickOpen} color="secondary">发布新商品</Button>
-            <NewProduct open={open} handleClose={handleClose} />
+            <NewProduct open={open} productData={productData} setProductData={setProductData} handleClose={handleClose} />
         </div>
     );
 }

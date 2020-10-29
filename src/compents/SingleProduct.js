@@ -54,7 +54,7 @@ function SingleProduct(props) {
     const star = async () => {
         if (loginInfo) {
             const data = `ItemID=${ItemID}`
-            const res = await sendPost('/back_end/Like', data)
+            const res = await sendPost('/back_end_war_exploded/Like', data)
             if (res.answer === 'true') {
                 console.log('收藏成功')
             }

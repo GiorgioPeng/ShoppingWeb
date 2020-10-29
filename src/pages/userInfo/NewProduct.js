@@ -11,6 +11,9 @@ import Notify from '../../compents/Notify'
 import Button from '@material-ui/core/Button';
 import sendPost from '../../api/sendPost'
 import sendImgPost from '../../api/senImgPost'
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 // 这个组件用来发布新商品
 
 const useBackDropStyles = makeStyles((theme) => ({
@@ -23,15 +26,20 @@ const useBackDropStyles = makeStyles((theme) => ({
         display: 'none',
     },
     previewImg: {
-        display: 'none'
+        display: 'none',
+        maxWidth:'80%'
     },
     content: {
+        width:'100%',
         display: 'flex',
         justifyContent: 'center'
     },
     description: {
         width: '80%',
         textAlign: 'center'
+    },
+    inner:{
+        width:'60%'
     }
 }))
 
@@ -39,16 +47,7 @@ const useBackDropStyles = makeStyles((theme) => ({
 
 const NewProduct = (props) => {
     const classes = useBackDropStyles()
-    const [productData, setProductData] = React.useState(
-        {
-            'ItemName': '',
-            'ItemPrice': 0,
-            'ItemType': '',
-            'ItemDescription': '',
-            'ItemQuantity': 0,
-            'ItemPicture': ''
-        }
-    )
+    const { productData, setProductData } = props
     const imgRef = React.createRef()
     const displayRef = React.createRef()
     const preview = () => {
@@ -91,15 +90,17 @@ const NewProduct = (props) => {
     const ensurePublish = async () => {
         console.log(productData.ItemPicture)
         if (productData.ItemPicture) {
+            // 在上传的时候尝试对现有项目进行删除,这个操作是一个幂等操作,没有副作用,可以放心使用
+            await sendPost('back_end_war_exploded/DeleteItem', `ItemID=${productData.ItemID}`)
             const data = `ItemName=${productData.ItemName}&ItemType=${productData.ItemType}&ItemPrice=${productData.ItemPrice}&ItemDescription=${productData.ItemDescription}&ItemQuantity=${productData.ItemQuantity}`
-            const res = await sendPost('back_end/add', data)
+            const res = await sendPost('back_end_war_exploded/add', data)
             console.log(res)
             if (res.ItemID !== 'false') {
                 const formdata = new FormData();
                 formdata.append('pic', productData.ItemPicture);
                 formdata.append('ItemID', res.ItemID);
                 console.log(formdata)
-                const res2 = await sendImgPost('back_end/Image', formdata)
+                const res2 = await sendImgPost('back_end_war_exploded/Image', formdata)
                 console.log(res2)
                 // if(res2.)
                 handleNotifyOpen()
@@ -135,16 +136,43 @@ const NewProduct = (props) => {
                 <DialogContent>
                     <Grid container spacing={3}>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField value={productData.ItemName} onChange={handleChange('ItemName')} variant="outlined" label="商品名称" size="small" />
+                            <TextField className={classes.inner} required value={productData.ItemName} onChange={handleChange('ItemName')} variant="outlined" label="商品名称" size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField value={productData.ItemType} onChange={handleChange('ItemType')} variant="outlined" label="商品类型" size="small" />
+                            {/* <TextField value={productData.ItemType} onChange={handleChange('ItemType')} variant="outlined" label="商品类型" size="small" /> */}
+                            <FormControl className={classes.inner} required>
+                                <InputLabel htmlFor="age-native-required">商品类型</InputLabel>
+                                <Select
+                                    native
+                                    variant='outlined'
+                                    value={productData.ItemType}
+                                    onChange={handleChange('ItemType')}
+                                    name="type"
+                                    inputProps={{
+                                        id: 'type-native-required',
+                                    }}
+                                >
+                                    <option aria-label="None" value="" />
+                                    <option value={'clothes'}>clothes</option>
+                                    <option value={'toy'}>toy</option>
+                                    <option value={'digital'}>digital</option>
+                                    <option value={'medicine'}>medicine</option>
+                                    <option value={'car'}>car</option>
+                                    <option value={'baby'}>baby</option>
+                                    <option value={'house'}>house</option>
+                                    <option value={'book'}>book</option>
+                                    <option value={'snack'}>snack</option>
+                                    <option value={'tool'}>tool</option>
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField value={productData.ItemQuantity} onChange={handleChange('ItemQuantity')} type='number' variant="outlined" label="商品数量" size="small" />
+                            <TextField className={classes.inner} required value={productData.ItemQuantity} onChange={handleChange('ItemQuantity')} type='number' variant="outlined" label="商品数量" size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
                             <TextField
+                            className={classes.inner}
+                                required
                                 type='number'
                                 variant="outlined"
                                 label="商品价格"
@@ -156,7 +184,7 @@ const NewProduct = (props) => {
                                 size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField className={classes.description} value={productData.ItemDescription} onChange={handleChange('ItemDescription')} variant="outlined" label="商品描述" size="large" />
+                            <TextField required className={classes.description} value={productData.ItemDescription} onChange={handleChange('ItemDescription')} variant="outlined" label="商品描述" size="large" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
                             <input

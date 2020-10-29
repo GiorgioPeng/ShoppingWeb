@@ -8,7 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import changer from '../../compents/ChangeImgUrl';
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,21 +23,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function createData(name, img, price, count, date) {
-    return { name, img, price, count, date };
-}
-
-const rows = [
-    createData('高的钱包', `${process.env.PUBLIC_URL}/book.png`, 6.0, 24, '2020-13-32'),
-    createData('高的💻', `${process.env.PUBLIC_URL}/digital.png`, 9.0, 37, '2020-13-32'),
-    createData('高的女友', `${process.env.PUBLIC_URL}/baby.png`, 16.0, 24, '2020-13-32'),
-    createData('高的🏠', `${process.env.PUBLIC_URL}/house.png`, 3.7, 67, '2020-13-32'),
-    createData('高的美食', `${process.env.PUBLIC_URL}/snack.png`, 16.0, 49, '2020-13-32'),
-];
-
-function ListProducts() {
+function ListProducts(props) {
     const classes = useStyles();
-
+    const { buyList } = props;
     return (
         <div className={classes.root}>
             <TableContainer component={Paper}>
@@ -53,38 +42,43 @@ function ListProducts() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow hover className={classes.item} key={row.name}>
-                                <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="left">
-                                    <Avatar
-                                        className={classes.large}
-                                        alt='user'
-                                        variant="square"
-                                        src={row.img}
-                                    />
-                                </TableCell>
-                                <TableCell align="right">¥{row.price}</TableCell>
-                                <TableCell align="right">{row.count}</TableCell>
-                                <TableCell align="right">{row.date}</TableCell>
-                                <TableCell align="right">
-                                    {Math.random() > 0.5 ?
-                                        <Button color='secondary'>确认收货</Button>
-                                        : 
-                                        <Button disabled>已收货</Button>
-                                    }
-                                </TableCell>
-                                <TableCell align="right">
-                                    {Math.random() > 0.5 ?
-                                        <Button color='primary'>写评价</Button>
-                                        :
-                                        <Button disabled>已评价</Button>
-                                    }
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {
+                            buyList.length !== 0 ?
+                                buyList.map((row) => (
+                                    <TableRow hover className={classes.item} key={row.ItemID}>
+                                        <TableCell component="th" scope="row">
+                                            {row.ItemName}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Avatar
+                                                className={classes.large}
+                                                alt='user'
+                                                variant="square"
+                                                src={changer(row.Picture)}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="right">${row.ItemPrice}</TableCell>
+                                        <TableCell align="right">{row.ItemQuantity}</TableCell>
+                                        <TableCell align="right">{row.ItemType}</TableCell>
+                                        <TableCell align="right">
+                                            {Math.random() > 0.5 ?
+                                                <Button color='secondary'>确认收货</Button>
+                                                :
+                                                <Button disabled>已收货</Button>
+                                            }
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {Math.random() > 0.5 ?
+                                                <Button color='primary'>申请退款</Button>
+                                                :
+                                                <Button disabled>已退款</Button>
+                                            }
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                                :
+                                <p>您还未购买任何商品</p>
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>

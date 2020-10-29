@@ -1,5 +1,4 @@
 import React from 'react'
-import TodayRecommand from './todayRecommand'
 import ProductGrid from '../../compents/ProductGrid'
 import Kind from '../../compents/Kind'
 import sendPost from '../../api/sendPost'
@@ -14,7 +13,7 @@ function Index(props) {
     React.useEffect(() => {
         const getProductsInfo = async () => {
             setBackdropOpen(true)
-            const res = await sendPost('back_end/AllItems')
+            const res = await sendPost('back_end_war_exploded/AllItems')
             if (res) {
                 console.log('in Index ')
                 const temp = res.Item

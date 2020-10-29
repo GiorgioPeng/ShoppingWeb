@@ -101,14 +101,15 @@ const useStyles = makeStyles((theme) => ({
       height: "200%"
     }
   },
-  searchButton:{
-    marginLeft:theme.spacing(1)
+  searchButton: {
+    marginLeft: theme.spacing(1)
   }
 }));
 
 function Top(props) {
   const Link = props.link;
   const setItemData = props.setItemData
+  const setLoginInfo = props.setLoginInfo
   const classes = useStyles();
   const [notifyOpen, setNotifyOpen] = React.useState(false)
   const [inputText, setInputText] = React.useState('')
@@ -116,13 +117,13 @@ function Top(props) {
     if (!props.loginInfo)
       setNotifyOpen(true)
   }
-  const handleInput = (event)=>{
+  const handleInput = (event) => {
     setInputText(event.target.value)
   }
-  
-  const searchItems = async()=>{
+
+  const searchItems = async () => {
     setBackdropOpen(true)
-    const res = await sendPost('back_end/FindItem', 'ItemName='+inputText)
+    const res = await sendPost('/back_end_war_exploded/FindItem', 'ItemName=' + inputText)
     setItemData(res.Item)
     setBackdropOpen(false);
     console.log(res.Item)
@@ -135,12 +136,15 @@ function Top(props) {
 
     setNotifyOpen(false);
   };
+  const logout = () => {
+    setLoginInfo(null)
+  }
   return (
     <div className={classes.root}>
       <AppBar className={classes.bar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            {props.loginInfo?`Hello, ${props.loginInfo.AccountName}`:`Online shopping of Municipal party committee`}
+            {props.loginInfo ? `Hello, ${props.loginInfo.AccountName}` : `Online shopping of Municipal party committee`}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -172,8 +176,8 @@ function Top(props) {
               <span className={classes.buttonsText}>Star<GradeOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
             {props.loginInfo ?
-              <Link to="/logout">
-                <span className={classes.buttonsText}>Logout<VpnKeyOutlinedIcon style={{ fontSize: 16 }} /></span>
+              <Link to="/">
+                <span className={classes.buttonsText} onClick={logout}>Logout<VpnKeyOutlinedIcon style={{ fontSize: 16 }} /></span>
               </Link>
               :
               <Link to="/login">
@@ -185,7 +189,7 @@ function Top(props) {
         </Toolbar>
       </AppBar>
       <Notify open={notifyOpen} message={'请先登录'} type={'warning'} handleClose={handleNotifyClose} />
-      <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
+      <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
     </div >
   );
 }

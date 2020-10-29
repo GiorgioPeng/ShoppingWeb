@@ -7,8 +7,10 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
-import tileData from '../index/tileData'
+// import tileData from '../index/tileData'
+import CircularIndeterminate from '../../compents/CircularIndeterminate'
 import sendPost from '../../api/sendPost'
+import changer from '../../compents/ChangeImgUrl'
 // 这个页面用来展示商品的详情信息, 比如淘宝点击进去一个鞋子,可以进行选择大小
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,9 +46,9 @@ function Index(props) {
   const id = props.match.params.identify
   const [identify, setIdentify] = React.useState('');
   const [product, setProduct] = React.useState(null)
-  const [sumPrice,setSumPrice] = React.useState(10000)
+  const [sumPrice, setSumPrice] = React.useState(10000)
   const [open, setOpen] = React.useState(false);
-
+  const [backDropOpen, setBackdropOpen] = React.useState(false);
   const handleClick = () => {
     setOpen(true);
   };
@@ -58,20 +60,29 @@ function Index(props) {
     setOpen(false);
   };
 
-  React.useEffect(()=>{
-    const getItemInfo = async()=>{
+  const buy = async () => {
+    // const data = `ItemID=${id}`
+    // const res = await sendPost('/back_end_war_exploded/OneItem', data)
+    // console.log(res)
+    // setProduct(res)
+  }
+
+  React.useEffect(() => {
+    const getItemInfo = async () => {
+      setBackdropOpen(true)
       const data = `ItemID=${id}`
-      const res = await sendPost('/back_end/OneItem',data)
+      const res = await sendPost('/back_end_war_exploded/OneItem', data)
       console.log(res)
+      setBackdropOpen(false)
       setProduct(res)
     }
     getItemInfo()
-  },[])
+  }, [])
 
   React.useEffect(() => {
     setIdentify(id)
-    setProduct(tileData.filter((e) => e.title === identify)[0])
-  }, [identify,id])
+    // setProduct(tileData.filter((e) => e.title === identify)[0])
+  }, [identify, id])
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -79,7 +90,7 @@ function Index(props) {
 
           <Grid item>
             <ButtonBase disabled className={classes.image}>
-              <img className={classes.img} alt="complex" src={product?.ItemPicture} />
+              <img className={classes.img} alt="complex" src={product?changer(product.ItemPicture):''} />
             </ButtonBase>
           </Grid>
 
@@ -104,10 +115,10 @@ function Index(props) {
                   margin="normal"
                   variant="outlined"
                   type="number"
-                  onChange={(e)=>{
-                    if(e.target.value>=0)
-                      setSumPrice(e.target.value*product?product.ItemPrice:0)
-                    else{
+                  onChange={(e) => {
+                    if (e.target.value >= 0)
+                      setSumPrice(e.target.value * product ? product.ItemPrice : 0)
+                    else {
                       e.target.value = 0
                     }
                   }}
@@ -115,9 +126,9 @@ function Index(props) {
                 <Typography variant="subtitle1" color='error'>
                   单个价格: ${product?.ItemPrice}
                 </Typography>
-                <br/>
-                <br/>
-                <br/>
+                <br />
+                <br />
+                <br />
                 <Typography variant="subtitle2" color='error'>
                   总价: ¥{sumPrice}
                 </Typography>
@@ -125,7 +136,7 @@ function Index(props) {
 
               <Grid item container>
                 <Grid item xs={8}>
-                  <Button variant='contained' color='secondary'>
+                  <Button variant='contained' color='secondary' onClick={buy}>
                     立即购买
                     </Button>
                 </Grid>
@@ -141,7 +152,8 @@ function Index(props) {
           </Grid>
         </Grid>
       </Paper>
-      <Snackbar open={open} message="加入购物车成功!" autoHideDuration={500} onClose={handleClose}/>
+      <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
+      <Snackbar open={open} message="加入购物车成功!" autoHideDuration={500} onClose={handleClose} />
     </div>
   );
 }

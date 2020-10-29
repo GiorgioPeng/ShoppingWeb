@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function ListProducts(props) {
-    const {starList} = props
+    const { starList } = props
     const classes = useStyles();
 
     return (
@@ -44,30 +44,34 @@ function ListProducts(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {starList?.map((row) => (
-                            <TableRow hover className={classes.item} key={row.ItemID}>
-                                <TableCell component="th" scope="row">
-                                    {row.ItemName}
-                                </TableCell>
-                                <TableCell align="left">
-                                    <Avatar
-                                        className={classes.large}
-                                        alt='user'
-                                        variant="square"
-                                        src={changer(row.Picture)}
-                                    />
-                                </TableCell>
-                                <TableCell align="right">${row.ItemPrice}</TableCell>
-                                <TableCell align="right">{row.ItemQuantity}</TableCell>
-                                <TableCell align="right">{row.ItemType}</TableCell>
-                                <TableCell align="right">
-                                    <Button variant="contained">加入购物车</Button>
-                                </TableCell>
-                                <TableCell>
-                                    <Button variant="contained" color='secondary'>删除</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {starList.length !== 0 ?
+                            starList?.map((row) => (
+                                <TableRow hover className={classes.item} key={row.ItemID}>
+                                    <TableCell component="th" scope="row">
+                                        {row.ItemName}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <Avatar
+                                            className={classes.large}
+                                            alt='user'
+                                            variant="square"
+                                            src={changer(row.Picture)}
+                                        />
+                                    </TableCell>
+                                    <TableCell align="right">${row.ItemPrice}</TableCell>
+                                    <TableCell align="right">{row.ItemQuantity}</TableCell>
+                                    <TableCell align="right">{row.ItemType}</TableCell>
+                                    <TableCell align="right">
+                                        <Button variant="contained">加入购物车</Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button variant="contained" color='secondary'>删除</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                            :
+                            <p>您还未收藏任何商品</p>
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>

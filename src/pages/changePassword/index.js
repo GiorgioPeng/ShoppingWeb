@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import sendPost from '../../api/sendPost'
 import Notify from '../../compents/Notify'
 import linkTo from '../../compents/LinkTo'
+import encrypt from '../../compents/Encrypt'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -120,12 +121,12 @@ function Index(props) {
         setNotifyOpen2(false);
     };
     const submit = async () => {
-        const data = `OldPassword=${values.OldPassword}&NewPassword=${values.NewPassword}`
-        const res = await sendPost('/back_end/ChangePassword', data)
+        const data = `OldPassword=${encrypt(values.OldPassword)}&NewPassword=${encrypt(values.NewPassword)}`
+        const res = await sendPost('/back_end_war_exploded/ChangePassword', data)
         console.log(res)
         if (res.answer === 'true') {
             handleNotifyOpen2()
-            setTimeout(()=>linkTo('login'),1500)
+            setTimeout(()=>linkTo('shoppingweb'),1500)
         }
         else {
             handleNotifyOpen();

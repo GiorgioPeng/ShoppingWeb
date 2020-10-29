@@ -31,7 +31,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Top link={Link} setItemData={setItemData} loginInfo={loginInfo} />
+        <Top link={Link} setItemData={setItemData} setLoginInfo={setLoginInfo} loginInfo={loginInfo} />
         <Switch>
           <Route path="/shoppingweb" exact
             render={() =>

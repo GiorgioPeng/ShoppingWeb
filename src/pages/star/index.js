@@ -18,7 +18,7 @@ function Index(props) {
     React.useEffect(() => {
         const getStarList = async () => {
             if (loginInfo) {
-                const res = await sendGet('/back_end/AllCollections')
+                const res = await sendGet('/back_end_war_exploded/AllCollections')
                 setStarList(res.Collet)
             }
         }

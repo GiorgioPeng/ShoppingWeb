@@ -86,19 +86,19 @@ function Index(props) {
     const handleSubmit = async () => {
         setBackdropOpen(true)
         const data = `PhoneNumber=${values.PhoneNumber}&Name=${values.Name}&AccountName=${values.AccountName}&Password=${values.Password}&Deposit=${values.Deposit}`
-        const res = await sendPost('back_end/regist', data)
+        const res = await sendPost('back_end_war_exploded/regist', data)
         setBackdropOpen(false)
         console.log(res)
         if (res.answer === 'true') {
             const data2 = `PhoneNumber=${values.PhoneNumber}&Password=${values.Password}`
-            const res2 = await sendPost('back_end/Login', data2)
+            const res2 = await sendPost('back_end_war_exploded/Login', data2)
             //注册之后直接登陆
             if (res2.answer === 'true') {
                 linkTo('shoppingweb', () => { props.setLoginInfo(res2.AccountInformation[0]) })
             }
             console.log('注册成功')
         }
-        if (res.answer === 'exist') {
+        else if (res.answer === 'exist') {
             handleNotifyOpen('该手机号已经注册');
         }
         else {
