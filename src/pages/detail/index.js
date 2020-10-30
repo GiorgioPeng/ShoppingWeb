@@ -11,6 +11,7 @@ import CircularIndeterminate from '../../compents/CircularIndeterminate'
 import sendPost from '../../api/sendPost'
 import changer from '../../compents/ChangeImgUrl'
 // 这个页面用来展示商品的详情信息, 比如淘宝点击进去一个鞋子,可以进行选择大小
+// TODO OneItem 接口没有返回ItemID
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: '10px auto',
@@ -49,10 +50,18 @@ function Index(props) {
   const [notifyOpen, setNotifyOpen] = React.useState(false);
   const [notifyOpen2, setNotifyOpen2] = React.useState(false);
   const [notifyOpen3, setNotifyOpen3] = React.useState(false);
+  const [notifyOpen4, setNotifyOpen4] = React.useState(false);
   const [backDropOpen, setBackdropOpen] = React.useState(false);
   const [quantity, setQuantity] = React.useState(0)
-  const handleClick = () => {
-    setNotifyOpen(true);
+  const handleClick = async() => {
+      const data = `ItemID=${id}`
+      const res = await sendPost('/back_end_war_exploded/Like', data)
+      if (res.answer === 'true') {
+        setNotifyOpen(true);
+      }
+      else{
+        setNotifyOpen4(true)
+      }
   };
 
 
@@ -68,6 +77,10 @@ function Index(props) {
 
   const handleNotifyClose3 = ()=>{
     setNotifyOpen3(false)
+  }
+
+  const handleNotifyClose4 = ()=>{
+    setNotifyOpen4(false)
   }
 
   const buy = async () => {
@@ -145,9 +158,13 @@ function Index(props) {
                 </Typography>
                 <br />
                 <br />
+
+                <Typography variant="subtitle1" color='error'>
+                  剩余数量: {product?.ItemQuantity}
+                </Typography>
                 <br />
                 <Typography variant="subtitle2" color='error'>
-                  总价: ¥{sumPrice}
+                  总价: ${sumPrice}
                 </Typography>
               </Grid>
 
@@ -158,8 +175,8 @@ function Index(props) {
                     </Button>
                 </Grid>
                 <Grid item xs={4}>
-                  <Button variant='contained' onClick={handleClick}>
-                    加入购物车
+                  <Button variant='contained' onClick={()=>handleClick()}>
+                    加入收藏
                   </Button>
                 </Grid>
               </Grid>
@@ -170,7 +187,8 @@ function Index(props) {
         </Grid>
       </Paper>
       <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
-      <Notify open={notifyOpen} message={'加入购物车成功!'} type={'success'} handleClose={handleNotifyClose} />
+      <Notify open={notifyOpen} message={'加入收藏成功!'} type={'success'} handleClose={handleNotifyClose} />
+      <Notify open={notifyOpen4} message={'加入收藏失败!'} type={'error'} handleClose={handleNotifyClose4} />
       <Notify open={notifyOpen2} message={'购买成功!'} type={'success'} handleClose={handleNotifyClose2} />
       <Notify open={notifyOpen3} message={'购买失败!'} type={'error'} handleClose={handleNotifyClose3} />
     </div>

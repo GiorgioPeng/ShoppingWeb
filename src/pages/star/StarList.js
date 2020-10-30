@@ -30,12 +30,16 @@ function ListProducts(props) {
     const { starList } = props
     const classes = useStyles();
 
-    const dislike = async(item)=>{
-        const res = await sendPost("/back_end_war_exploded/Dislike",`ItemID=${item.ItemID}`)
+    const dislike = async (item) => {
+        const res = await sendPost("/back_end_war_exploded/Dislike", `ItemID=${item.ItemID}`)
         linkTo('shoppingweb')
         console.log(res)
     }
 
+    const handleBuy = (itemID) => {
+        let destination = 'shoppingweb/detail/' + itemID
+        linkTo(destination)
+    }
     return (
         <div className={classes.root}>
             <TableContainer component={Paper}>
@@ -70,10 +74,10 @@ function ListProducts(props) {
                                     <TableCell align="right">{row.ItemQuantity}</TableCell>
                                     <TableCell align="right">{row.ItemType}</TableCell>
                                     <TableCell align="right">
-                                        <Button variant="contained">加入购物车</Button>
+                                        <Button variant="contained" onClick={() => handleBuy(row.ItemID)}>立即购买</Button>
                                     </TableCell>
                                     <TableCell>
-                                        <Button variant="contained" color='secondary' onClick={()=>dislike(row)}>删除</Button>
+                                        <Button variant="contained" color='secondary' onClick={() => dislike(row)}>删除</Button>
                                     </TableCell>
                                 </TableRow>
                             ))

@@ -91,15 +91,15 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end',
     fontSize: '15px',
     position: 'relative',
-    '&:before': {
-      content: `""`,
-      width: theme.spacing(1),
-      borderRight: '1px solid #333',
-      position: 'absolute',
-      left: '100%',
-      top: '-50%',
-      height: "200%"
-    }
+    // '&:before': {
+    //   content: `""`,
+    //   width: theme.spacing(1),
+    //   borderRight: '1px solid #333',
+    //   position: 'absolute',
+    //   left: '120%',
+    //   top: '-50%',
+    //   height: "200%"
+    // }
   },
   searchButton: {
     marginLeft: theme.spacing(1)
@@ -144,7 +144,7 @@ function Top(props) {
       <AppBar className={classes.bar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            {props.loginInfo ? `Hello, ${props.loginInfo.AccountName}` : `Online shopping of Municipal party committee`}
+            {props.loginInfo ? `Hello, ${props.loginInfo.AccountName}` : `Online shopping of Scott Piao`}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -169,9 +169,9 @@ function Top(props) {
             <Link onClick={handleNotifyOpen} to="/userinfo">
               <span className={classes.buttonsText}>User Info<PermIdentityOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
-            <Link onClick={handleNotifyOpen} to="/shoppingcar">
+            {/* <Link onClick={handleNotifyOpen} to="/shoppingcar">
               <span className={classes.buttonsText}>Shopping Car<ShoppingCartOutlinedIcon style={{ fontSize: 16 }} /></span>
-            </Link>
+            </Link> */}
             <Link onClick={handleNotifyOpen} to="/star">
               <span className={classes.buttonsText}>Star<GradeOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>

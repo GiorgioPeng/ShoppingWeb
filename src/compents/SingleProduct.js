@@ -10,6 +10,7 @@ import StarRateIcon from '@material-ui/icons/StarRate';
 import IconButton from '@material-ui/core/IconButton';
 import Notify from './Notify'
 import sendPost from '../api/sendPost'
+import linkTo from '../compents/LinkTo'
 // 用于显示单个商品的卡片
 // TODO 一般而言需要接受父组件传过来的数据
 const useStyles = makeStyles((theme) => ({
@@ -84,20 +85,19 @@ function SingleProduct(props) {
                 }, 1500)
             }, 10, scrollTop)
         }
-        else{
+        else {
             handleNotifyOpen()
         }
     }
     // 点击商品(信息获取在detail组件里)
     const handleProduct = (event) => {
-        console.log(event.target)
-        console.log(event.target.getAttribute('identify'))
-        let current = window.location.href
-        let destination = current + '/detail/' + event.target.getAttribute('identify')
-        console.log(destination)
-        let w = window.open('about:blank');
-        w.location.href = destination
-
+        if (loginInfo) {
+            let destination = 'shoppingweb/detail/' + event.target.getAttribute('identify')
+            linkTo(destination)
+        }
+        else{
+            handleNotifyOpen()
+        }
     }
     return (
         <Card className={classes.root}>
@@ -122,12 +122,12 @@ function SingleProduct(props) {
             </CardContent>
             <CardActions className={classes.text}>
                 <Typography variant="overline" className={classes.price}>
-                    ¥
+                    $
                     <Typography variant='h4'>
                         {price}
                     </Typography>
                 </Typography>
-                <IconButton aria-label="delete" onClick={handleStar} className={classes.margin}>
+                <IconButton aria-label="star" onClick={handleStar} className={classes.margin}>
                     <StarRateIcon color="secondary" />
                 </IconButton>
             </CardActions>

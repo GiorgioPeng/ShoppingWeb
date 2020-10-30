@@ -27,22 +27,42 @@ const useStyles = makeStyles((theme) => ({
 function ListProducts(props) {
     const classes = useStyles();
     const { buyList } = props;
-    const [refund, setRefund] = React.useState([])
     const [transportState, setTransportState] = React.useState([])
     React.useEffect(() => {
         const getProductInfo = async (itemID) => {
-            const res = await sendPost('/back_end_war_exploded/Refund', `ItemID=${itemID}`)
-            const res2 = await sendPost('/back_end_war_exploded/TransportState', `ItemID=${itemID}`)
-            // return [res.answer, res2.answer]
-            // TODO
+            const res = await sendPost('/back_end_war_exploded/TransportState', `ItemID=${itemID}`)
+            // console.log(res2.answer)
+            return res.answer
         }
-        if (buyList && buyList.length !== 0) {
-            for (let i of buyList) {
-                getProductInfo(i)
-                // TODO
+        const getTransportState = async () => {
+            let tempArr = []
+            if (buyList && buyList.length !== 0) {
+                for (let i of buyList) {
+                    tempArr.push(await getProductInfo(i.ItemID))
+                }
+
             }
+            return tempArr
         }
+
+        getTransportState()
+            .then((res) => setTransportState(res))
+
     }, [buyList])
+
+    React.useEffect(() => {
+        console.log(transportState)
+    }, [transportState])
+
+    const refund = async (itemID) => {
+        const res = await sendPost('/back_end_war_exploded/Refund', `ItemID=${itemID}`)
+        if (res.answer === 'true') {
+            // 退款成功
+        }
+        else {
+            // 退款失败
+        }
+    }
     return (
         <div className={classes.root}>
             <TableContainer component={Paper}>
@@ -52,16 +72,15 @@ function ListProducts(props) {
                             <TableCell>商品名称</TableCell>
                             <TableCell align="left">商品图片</TableCell>
                             <TableCell align="right">商品价格</TableCell>
-                            <TableCell align="right">数量</TableCell>
-                            <TableCell align="right">购买日期</TableCell>
-                            <TableCell align="right"> </TableCell>
+                            <TableCell align="right">商品类型</TableCell>
+                            <TableCell align="right">物流信息</TableCell>
                             <TableCell align="right"> </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             buyList.length !== 0 ?
-                                buyList.map((row) => (
+                                buyList.map((row, index) => (
                                     <TableRow hover className={classes.item} key={row.ItemID}>
                                         <TableCell component="th" scope="row">
                                             {row.ItemName}
@@ -75,20 +94,19 @@ function ListProducts(props) {
                                             />
                                         </TableCell>
                                         <TableCell align="right">${row.ItemPrice}</TableCell>
-                                        <TableCell align="right">{row.ItemQuantity}</TableCell>
                                         <TableCell align="right">{row.ItemType}</TableCell>
                                         <TableCell align="right">
-                                            {Math.random() > 0.5 ?
-                                                <Button color='secondary'>确认收货</Button>
-                                                :
-                                                <Button disabled>已收货</Button>
-                                            }
+                                            {transportState.length === 0 ? '' : transportState[index]}
                                         </TableCell>
                                         <TableCell align="right">
-                                            {Math.random() > 0.5 ?
-                                                <Button color='primary'>申请退款</Button>
-                                                :
-                                                <Button disabled>已退款</Button>
+                                            {
+                                                transportState.length === 0 ?
+                                                    ''
+                                                    :
+                                                    transportState[index] === "Goods arrived" ?
+                                                        <Button color='primary' onClick={() => refund(row.ItemID)}>申请退款</Button>
+                                                        :
+                                                        <Button color='primary' disabled>申请退款</Button>
                                             }
                                         </TableCell>
                                     </TableRow>

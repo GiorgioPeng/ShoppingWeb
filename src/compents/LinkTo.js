@@ -5,6 +5,7 @@ const linkTo = (distination,b)=>{
     if(typeof b === 'function'){
         b();
     }
+    console.log(tempUrl + '/' + distination)
     window.location.href = tempUrl + '/' + distination
 }
 export default linkTo

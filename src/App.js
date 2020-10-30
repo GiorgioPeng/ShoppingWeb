@@ -33,12 +33,13 @@ function App() {
       <Router>
         <Top link={Link} setItemData={setItemData} setLoginInfo={setLoginInfo} loginInfo={loginInfo} />
         <Switch>
+          <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Route path="/shoppingweb" exact
             render={() =>
               <Index itemData={itemData} loginInfo={loginInfo} setItemData={setItemData}></Index>
             }
           ></Route>
-          <Route path="/shoppingcar"
+          {/* <Route path="/shoppingcar"
             render={() =>
               loginInfo ? (
                 <ShoppingCar loginInfo={loginInfo}></ShoppingCar>
@@ -49,7 +50,7 @@ function App() {
                     }}
                   ></Redirect>
                 )
-            } />
+            } /> */}
           <Route path="/userinfo"
             render={() =>
               loginInfo ? (
@@ -88,7 +89,6 @@ function App() {
             } />
           <Route path="/login" component={() => (<Login setLoginInfo={setLoginInfo} />)} />
           <Route path="/register" component={() => (<Register setLoginInfo={setLoginInfo} />)} />
-          <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Redirect to="/shoppingweb"></Redirect>
         </Switch>
 
