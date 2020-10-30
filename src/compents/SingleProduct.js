@@ -51,7 +51,7 @@ function SingleProduct(props) {
 
         setNotifyOpen(false);
     };
-    const { img, ItemID, name, price, description, quantity, type } = props
+    const { img, ItemID, name, price, description } = props
     const star = async () => {
         if (loginInfo) {
             const data = `ItemID=${ItemID}`

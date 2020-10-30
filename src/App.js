@@ -9,7 +9,6 @@ import {
 import './App.css';
 import Top from './compents/Top'
 import Index from './pages/index'
-import ShoppingCar from './pages/shoppingCart'
 import Login from './pages/login'
 import UserInfo from './pages/userInfo'
 import Star from './pages/star'
@@ -41,22 +40,10 @@ function App() {
               <Index searchText={searchText} setSearchText={setSearchText} itemData={itemData} loginInfo={loginInfo} setItemData={setItemData}></Index>
             }
           ></Route>
-          {/* <Route path="/shoppingcar"
-            render={() =>
-              loginInfo ? (
-                <ShoppingCar loginInfo={loginInfo}></ShoppingCar>
-              ) : (
-                  <Redirect
-                    to={{
-                      pathname: "/login"
-                    }}
-                  ></Redirect>
-                )
-            } /> */}
           <Route path="/userinfo"
             render={() =>
               loginInfo ? (
-                <UserInfo loginInfo={loginInfo}></UserInfo>
+                <UserInfo loginInfo={loginInfo} setLoginInfo={setLoginInfo}></UserInfo>
               ) : (
                   <Redirect
                     to={{

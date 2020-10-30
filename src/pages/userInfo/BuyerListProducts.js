@@ -10,7 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import changer from '../../compents/ChangeImgUrl';
-import sendPost from '../../api/sendPost'
+import sendPost from '../../api/sendPost';
+import Notify from '../../compents/Notify';
+import linkTo from '../../compents/LinkTo'
 // 用来展示商品列表
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,40 +29,24 @@ const useStyles = makeStyles((theme) => ({
 function ListProducts(props) {
     const classes = useStyles();
     const { buyList } = props;
-    // const [transportState, setTransportState] = React.useState([])
-    // React.useEffect(() => {
-    //     const getProductInfo = async (itemID) => {
-    //         const res = await sendPost('/back_end_war_exploded/TransportState', `ItemID=${itemID}`)
-    //         // console.log(res2.answer)
-    //         return res.answer
-    //     }
-    //     const getTransportState = async () => {
-    //         let tempArr = []
-    //         if (buyList && buyList.length !== 0) {
-    //             for (let i of buyList) {
-    //                 tempArr.push(await getProductInfo(i.ItemID))
-    //             }
-
-    //         }
-    //         return tempArr
-    //     }
-
-    //     getTransportState()
-    //         .then((res) => setTransportState(res))
-
-    // }, [buyList])
-
-    // React.useEffect(() => {
-    //     console.log(transportState)
-    // }, [transportState])
-
-    const refund = async (itemID) => {
-        const res = await sendPost('/back_end_war_exploded/Refund', `ItemID=${itemID}`)
+    const [notifyOpen,setNotifyOpen] = React.useState(false)
+    const [notifyOpen2,setNotifyOpen2] = React.useState(false)
+    const handleNotifyClose = ()=>{
+        setNotifyOpen(false)
+    }
+    const handleNotifyClose2 = ()=>{
+        setNotifyOpen2(false)
+    }
+    const refund = async (itemID,createTime) => {
+        const res = await sendPost('/back_end_war_exploded/Refund', `ItemID=${itemID}&CreateTime=${createTime}`)
         if (res.answer === 'true') {
             // 退款成功
+            setNotifyOpen(true)
+            setTimeout(()=>linkTo('shoppingweb'),500)
         }
         else {
             // 退款失败
+            setNotifyOpen2(true)
         }
     }
     return (
@@ -74,49 +60,56 @@ function ListProducts(props) {
                             <TableCell align="right">商品价格</TableCell>
                             <TableCell align="right">商品类型</TableCell>
                             <TableCell align="right">物流信息</TableCell>
+                            <TableCell align="right">购买时间</TableCell>
                             <TableCell align="right"> </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
-                            buyList.length !== 0 ?
-                                buyList.map((row, index) => (
-                                    <TableRow hover className={classes.item} key={row.ItemID}>
-                                        <TableCell component="th" scope="row">
-                                            {row.ItemName}
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Avatar
-                                                className={classes.large}
-                                                alt='user'
-                                                variant="square"
-                                                src={changer(row.Picture)}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">${row.ItemPrice}</TableCell>
-                                        <TableCell align="right">{row.ItemType}</TableCell>
-                                        <TableCell align="right">
-                                            {row.TransportationState}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {
-                                                transportState.length === 0 ?
-                                                    ''
-                                                    :
-                                                    transportState[index] === "Goods arrived" ?
-                                                        <Button color='primary' onClick={() => refund(row.ItemID)}>申请退款</Button>
+                            buyList ? (
+                                buyList.length !== 0 ?
+                                    buyList.map((row, index) => (
+                                        <TableRow hover className={classes.item} key={row.ItemID}>
+                                            <TableCell component="th" scope="row">
+                                                {row.ItemName}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Avatar
+                                                    className={classes.large}
+                                                    alt='user'
+                                                    variant="square"
+                                                    src={changer(row.Picture)}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="right">${row.ItemPrice}</TableCell>
+                                            <TableCell align="right">{row.ItemType}</TableCell>
+                                            <TableCell align="right">
+                                                {row.TransportationState}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {new Date(row.PurchaseTime).toLocaleDateString()}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {
+                                                    row.TransportationState === "Goods arrived" ?
+                                                        <Button color='primary' onClick={() => refund(row.ItemID,row.PurchaseTime)}>申请退货</Button>
                                                         :
-                                                        <Button color='primary' disabled>申请退款</Button>
-                                            }
-                                        </TableCell>
-                                    </TableRow>
-                                ))
+                                                        <Button color='primary' disabled>申请退货</Button>
+                                                }
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                    :
+                                    <p>您还未购买任何商品</p>
+                            )
                                 :
                                 <p>您还未购买任何商品</p>
                         }
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Notify open={notifyOpen} message={'退款成功'} type={'success'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen2} message={'退款失败'} type={'error'} handleClose={handleNotifyClose2} />
         </div>
     );
 }

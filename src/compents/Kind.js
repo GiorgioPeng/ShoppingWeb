@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Kind(props) {
-    const {setItemData,setSearchText, searchText} = props
+    const {setItemData,setSearchText } = props
     const classes = useStyles();
     const arr = ['clothes', 'toy', 'digital', 'medicine', 'car', 'baby', 'house', 'book', 'snack', 'tool']
     const [backDropOpen, setBackdropOpen] = React.useState(false);

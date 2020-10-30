@@ -73,8 +73,8 @@ function ListProducts(props) {
         setOpen(true);
     }
 
-    const deleteItem = async (item)=>{
-        const res = await sendPost('/back_end_war_exploded/DeleteItem',`ItemID=${item.ItemID}`)
+    const deleteItem = async (item) => {
+        const res = await sendPost('/back_end_war_exploded/DeleteItem', `ItemID=${item.ItemID}`)
         linkTo('shoppingweb')
         console.log(res)
     }
@@ -98,34 +98,39 @@ function ListProducts(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {sellList.length !== 0 ?
-                            sellList.map((row) => (
-                                <TableRow hover className={classes.item} key={row.ItemID}>
-                                    <TableCell component="th" scope="row">
-                                        {row.ItemName}
-                                    </TableCell>
-                                    <TableCell align="left">
-                                        <Avatar
-                                            className={classes.large}
-                                            alt='user'
-                                            variant="square"
-                                            src={changer(row.Picture)}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">${row.ItemPrice}</TableCell>
-                                    <TableCell align="right">{row.ItemQuantity}</TableCell>
-                                    <TableCell align="right">{row.ItemType}</TableCell>
-                                    {/* <TableCell align="right">{row.date}</TableCell> */}
-                                    <TableCell align="right">
-                                        <Button color='secondary' onClick={()=>deleteItem(row)}>取消售卖</Button>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Button color='primary' onClick={() => modifyProduct(row)}>设置商品属性</Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                            :
-                            <p>您还未发布任何商品</p>
+                        {
+                            sellList ? (
+                                sellList.length !== 0 ?
+                                    sellList.map((row) => (
+                                        <TableRow hover className={classes.item} key={row.ItemID}>
+                                            <TableCell component="th" scope="row">
+                                                {row.ItemName}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Avatar
+                                                    className={classes.large}
+                                                    alt='user'
+                                                    variant="square"
+                                                    src={changer(row.Picture)}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="right">${row.ItemPrice}</TableCell>
+                                            <TableCell align="right">{row.ItemQuantity}</TableCell>
+                                            <TableCell align="right">{row.ItemType}</TableCell>
+                                            {/* <TableCell align="right">{row.date}</TableCell> */}
+                                            <TableCell align="right">
+                                                <Button color='secondary' onClick={() => deleteItem(row)}>取消售卖</Button>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Button color='primary' onClick={() => modifyProduct(row)}>设置商品属性</Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                    :
+                                    <p>您还未发布任何商品</p>
+                            )
+                                :
+                                <p>您还未发布任何商品</p>
                         }
                     </TableBody>
                 </Table>

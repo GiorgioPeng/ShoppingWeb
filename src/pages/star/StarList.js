@@ -56,31 +56,37 @@ function ListProducts(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {starList.length !== 0 ?
-                            starList?.map((row) => (
-                                <TableRow hover className={classes.item} key={row.ItemID}>
-                                    <TableCell component="th" scope="row">
-                                        {row.ItemName}
-                                    </TableCell>
-                                    <TableCell align="left">
-                                        <Avatar
-                                            className={classes.large}
-                                            alt='user'
-                                            variant="square"
-                                            src={changer(row.Picture)}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">${row.ItemPrice}</TableCell>
-                                    <TableCell align="right">{row.ItemQuantity}</TableCell>
-                                    <TableCell align="right">{row.ItemType}</TableCell>
-                                    <TableCell align="right">
-                                        <Button variant="contained" onClick={() => handleBuy(row.ItemID)}>立即购买</Button>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button variant="contained" color='secondary' onClick={() => dislike(row)}>删除</Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))
+                        {starList ?
+                            (
+                                starList.length !== 0 ? (
+                                    starList.map((row) => (
+                                        <TableRow hover className={classes.item} key={row.ItemID}>
+                                            <TableCell component="th" scope="row">
+                                                {row.ItemName}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Avatar
+                                                    className={classes.large}
+                                                    alt='user'
+                                                    variant="square"
+                                                    src={changer(row.Picture)}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="right">${row.ItemPrice}</TableCell>
+                                            <TableCell align="right">{row.ItemQuantity}</TableCell>
+                                            <TableCell align="right">{row.ItemType}</TableCell>
+                                            <TableCell align="right">
+                                                <Button variant="contained" onClick={() => handleBuy(row.ItemID)}>立即购买</Button>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button variant="contained" color='secondary' onClick={() => dislike(row)}>删除</Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )
+                                    :
+                                    <p>您还未收藏任何商品</p>
+                            )
                             :
                             <p>您还未收藏任何商品</p>
                         }

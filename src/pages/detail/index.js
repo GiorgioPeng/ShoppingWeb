@@ -52,7 +52,7 @@ function Index(props) {
   const [notifyOpen3, setNotifyOpen3] = React.useState(false);
   const [notifyOpen4, setNotifyOpen4] = React.useState(false);
   const [backDropOpen, setBackdropOpen] = React.useState(false);
-  const [quantity, setQuantity] = React.useState(0)
+  const [quantity, setQuantity] = React.useState(1)
   const handleClick = async() => {
       const data = `ItemID=${id}`
       const res = await sendPost('/back_end_war_exploded/Like', data)
@@ -138,7 +138,7 @@ function Index(props) {
                 <TextField
                   label="Quantity"
                   id="quantity"
-                  defaultValue="0"
+                  defaultValue="1"
                   className={classes.textField}
                   helperText="Purchase quantity"
                   margin="normal"
@@ -146,7 +146,7 @@ function Index(props) {
                   type="number"
                   onChange={(e) => {
                     if (e.target.value >= 0)
-                      setSumPrice(e.target.value * (product ? product.ItemPrice : 0))
+                      setSumPrice(e.target.value * (product ? product.ItemPrice : 1))
                     else {
                       e.target.value = 0
                     }

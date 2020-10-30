@@ -89,6 +89,7 @@ function BaseInfo(props) {
 
 function Index(props) {
   const classes = useStyles();
+  const {loginInfo,setLoginInfo} = props;
   const [backDropOpen, setBackdropOpen] = React.useState(false);
   const [sellList, setSellList] = React.useState([])
   const [buyList, setBuyList] = React.useState([])
@@ -105,13 +106,15 @@ function Index(props) {
       console.log(res2)
       setBuyList(res2.Item)
 
+      const res3 = await sendPost('back_end_war_exploded/GetDeposit',`PhoneNumber=${loginInfo.PhoneNumber}`)
+      setLoginInfo((previous)=>{return {...previous,'Deposit':res3.deposit}})
       setBackdropOpen(false)
     }
     getInfo()
   }, [])
   return (
     <div className={classes.root}>
-      <BaseInfo loginInfo={props.loginInfo} />
+      <BaseInfo loginInfo={loginInfo} />
       <Divider />
       <BuyerListProducts buyList={buyList} />
       <Divider />
