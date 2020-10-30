@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
-import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+// import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined';
 import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
@@ -110,9 +110,11 @@ function Top(props) {
   const Link = props.link;
   const setItemData = props.setItemData
   const setLoginInfo = props.setLoginInfo
+  const inputText = props.inputText
+  const setInputText = props.setInputText
   const classes = useStyles();
   const [notifyOpen, setNotifyOpen] = React.useState(false)
-  const [inputText, setInputText] = React.useState('')
+  // const [inputText, setInputText] = React.useState('')
   const handleNotifyOpen = () => {
     if (!props.loginInfo)
       setNotifyOpen(true)

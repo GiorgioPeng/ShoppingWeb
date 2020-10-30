@@ -24,6 +24,8 @@ function App() {
 
   const [itemData, setItemData] = React.useState([])
 
+  const [searchText, setSearchText] = React.useState([])
+
   React.useEffect(() => {
     console.log(loginInfo)
   }, [loginInfo])
@@ -31,12 +33,12 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Top link={Link} setItemData={setItemData} setLoginInfo={setLoginInfo} loginInfo={loginInfo} />
+        <Top inputText={searchText} setInputText={setSearchText} link={Link} setItemData={setItemData} setLoginInfo={setLoginInfo} loginInfo={loginInfo} />
         <Switch>
           <Route path="/shoppingweb/detail/:identify" component={Detail} />
           <Route path="/shoppingweb" exact
             render={() =>
-              <Index itemData={itemData} loginInfo={loginInfo} setItemData={setItemData}></Index>
+              <Index searchText={searchText} setSearchText={setSearchText} itemData={itemData} loginInfo={loginInfo} setItemData={setItemData}></Index>
             }
           ></Route>
           {/* <Route path="/shoppingcar"

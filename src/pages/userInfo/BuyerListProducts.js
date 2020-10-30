@@ -27,32 +27,32 @@ const useStyles = makeStyles((theme) => ({
 function ListProducts(props) {
     const classes = useStyles();
     const { buyList } = props;
-    const [transportState, setTransportState] = React.useState([])
-    React.useEffect(() => {
-        const getProductInfo = async (itemID) => {
-            const res = await sendPost('/back_end_war_exploded/TransportState', `ItemID=${itemID}`)
-            // console.log(res2.answer)
-            return res.answer
-        }
-        const getTransportState = async () => {
-            let tempArr = []
-            if (buyList && buyList.length !== 0) {
-                for (let i of buyList) {
-                    tempArr.push(await getProductInfo(i.ItemID))
-                }
+    // const [transportState, setTransportState] = React.useState([])
+    // React.useEffect(() => {
+    //     const getProductInfo = async (itemID) => {
+    //         const res = await sendPost('/back_end_war_exploded/TransportState', `ItemID=${itemID}`)
+    //         // console.log(res2.answer)
+    //         return res.answer
+    //     }
+    //     const getTransportState = async () => {
+    //         let tempArr = []
+    //         if (buyList && buyList.length !== 0) {
+    //             for (let i of buyList) {
+    //                 tempArr.push(await getProductInfo(i.ItemID))
+    //             }
 
-            }
-            return tempArr
-        }
+    //         }
+    //         return tempArr
+    //     }
 
-        getTransportState()
-            .then((res) => setTransportState(res))
+    //     getTransportState()
+    //         .then((res) => setTransportState(res))
 
-    }, [buyList])
+    // }, [buyList])
 
-    React.useEffect(() => {
-        console.log(transportState)
-    }, [transportState])
+    // React.useEffect(() => {
+    //     console.log(transportState)
+    // }, [transportState])
 
     const refund = async (itemID) => {
         const res = await sendPost('/back_end_war_exploded/Refund', `ItemID=${itemID}`)
@@ -96,7 +96,7 @@ function ListProducts(props) {
                                         <TableCell align="right">${row.ItemPrice}</TableCell>
                                         <TableCell align="right">{row.ItemType}</TableCell>
                                         <TableCell align="right">
-                                            {transportState.length === 0 ? '' : transportState[index]}
+                                            {row.TransportationState}
                                         </TableCell>
                                         <TableCell align="right">
                                             {

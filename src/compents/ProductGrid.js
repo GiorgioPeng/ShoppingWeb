@@ -30,7 +30,7 @@ const CreateItem = (props) => {
         }
     }
     tempArr.push(tempTempArr)
-    console.log(tempArr)
+    // console.log(tempArr)
     return (
         <Grid container spacing={1} alignContent='center' alignItems='center' justify='center'>
             {
