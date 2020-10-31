@@ -89,7 +89,7 @@ function BaseInfo(props) {
             Tel: {loginInfo.PhoneNumber}
           </Typography>
 
-          <Button onClick={() => linkTo('changepassword')} color="secondary">修改密码</Button>
+          <Button onClick={() => linkTo('changepassword')} color="secondary">Change Password</Button>
         </Grid>
       </Grid>
     </Grid>)
@@ -102,6 +102,7 @@ function Index(props) {
   const [sellList, setSellList] = React.useState([])
   const [buyList, setBuyList] = React.useState([])
   React.useEffect(() => {
+
     // send three requests to the backend
     // get the information of all items which is published by current user
     // get the information of all orders of current user
