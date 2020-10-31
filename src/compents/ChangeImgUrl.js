@@ -9,7 +9,10 @@ const changer = (imgUrl)=>{
     }catch (error) {
         console.log('invaild img url')
     }
-    imgUrl = `http://127.0.0.1:8000/back_end_war_exploded/` + imgUrl
+    let temp = window.location.toString().split('/')
+    temp = temp.slice(0,3)
+    imgUrl = temp.join('/') + '/back_end_war_exploded/' + imgUrl
+    console.log(imgUrl)
     return imgUrl
 }
 export default changer
