@@ -179,12 +179,12 @@ function Index(props) {
               <Grid item container>
                 <Grid item xs={8}>
                   <Button variant='contained' color='secondary' onClick={buy}>
-                    立即购买
+                    Buy
                     </Button>
                 </Grid>
                 <Grid item xs={4}>
                   <Button variant='contained' onClick={() => handleClick()}>
-                    加入收藏
+                    Star
                   </Button>
                 </Grid>
               </Grid>
