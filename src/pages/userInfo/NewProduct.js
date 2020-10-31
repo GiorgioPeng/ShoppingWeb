@@ -14,8 +14,8 @@ import sendImgPost from '../../api/senImgPost'
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-// 这个组件用来发布新商品
 
+// define CSS
 const useBackDropStyles = makeStyles((theme) => ({
     root: {
         height: '70vmin',
@@ -27,10 +27,10 @@ const useBackDropStyles = makeStyles((theme) => ({
     },
     previewImg: {
         display: 'none',
-        maxWidth:'80%'
+        maxWidth: '80%'
     },
     content: {
-        width:'100%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center'
     },
@@ -38,20 +38,25 @@ const useBackDropStyles = makeStyles((theme) => ({
         width: '80%',
         textAlign: 'center'
     },
-    inner:{
-        width:'60%'
+    inner: {
+        width: '60%'
     }
 }))
 
 
-
+// publish new product component
+// --
+// props: from parent component, must include handleClose, productData and setProductData
+// --
+// return: HTML elements
 const NewProduct = (props) => {
     const classes = useBackDropStyles()
     const { productData, setProductData } = props
     const imgRef = React.createRef()
     const displayRef = React.createRef()
+
+    // receive the image which is uploaded by the current user
     const preview = () => {
-        // console.log(imgRef.current.files)
         const file = imgRef.current.files[0]
         if (file) {
             displayRef.current.src = window.URL.createObjectURL(file)
@@ -59,16 +64,20 @@ const NewProduct = (props) => {
         }
     }
 
+    // when the image finish loading, show the image
     const handleLoad = () => {
         displayRef.current.style.display = 'block'
         window.URL.revokeObjectURL(displayRef.current.src)
     }
     const [notifyOpen, setNotifyOpen] = React.useState(false)
     const [notifyOpen2, setNotifyOpen2] = React.useState(false)
+
+    // open the nofity of publishing success
     const handleNotifyOpen = () => {
         setNotifyOpen(true)
     }
 
+    // close the nofity of publishing success
     const handleNotifyClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -76,10 +85,13 @@ const NewProduct = (props) => {
 
         setNotifyOpen(false);
     };
+
+    // open the nofity if the user does not upload a image of the product
     const handleNotifyOpen2 = () => {
         setNotifyOpen2(true)
     }
 
+    // open the nofity if the user does not upload a image of the product
     const handleNotifyClose2 = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -87,22 +99,24 @@ const NewProduct = (props) => {
 
         setNotifyOpen2(false);
     };
+
+    // send a request to the backend
+    // first try to remove current product by the item id, it is a idempotent operation.
+    // second publish the product and get the item id
+    // third send the image of the product to the backend
+    // and then update the state of the component
     const ensurePublish = async () => {
         console.log(productData.ItemPicture)
         if (productData.ItemPicture) {
-            // 在上传的时候尝试对现有项目进行删除,这个操作是一个幂等操作,没有副作用,可以放心使用
             await sendPost('back_end_war_exploded/DeleteItem', `ItemID=${productData.ItemID}`)
             const data = `ItemName=${productData.ItemName}&ItemType=${productData.ItemType}&ItemPrice=${productData.ItemPrice}&ItemDescription=${productData.ItemDescription}&ItemQuantity=${productData.ItemQuantity}`
             const res = await sendPost('back_end_war_exploded/add', data)
-            console.log(res)
             if (res.ItemID !== 'false') {
                 const formdata = new FormData();
                 formdata.append('pic', productData.ItemPicture);
                 formdata.append('ItemID', res.ItemID);
                 console.log(formdata)
-                const res2 = await sendImgPost('back_end_war_exploded/Image', formdata)
-                console.log(res2)
-                // if(res2.)
+                await sendImgPost('back_end_war_exploded/Image', formdata)
                 handleNotifyOpen()
                 props.handleClose()
                 setProductData(
@@ -123,6 +137,7 @@ const NewProduct = (props) => {
 
 
     }
+    // synchronize the input value and the state of the component
     const handleChange = (prop) => (event) => {
         setProductData({ ...productData, [prop]: event.target.value });
     }
@@ -132,22 +147,21 @@ const NewProduct = (props) => {
                 open={props.open}
                 onClose={props.handleClose}
             >
-                <DialogTitle >发布新商品</DialogTitle>
+                <DialogTitle>Publish New Product</DialogTitle>
                 <DialogContent>
                     <Grid container spacing={3}>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField className={classes.inner} required value={productData.ItemName} onChange={handleChange('ItemName')} variant="outlined" label="商品名称" size="small" />
+                            <TextField className={classes.inner} required value={productData.ItemName} onChange={handleChange('ItemName')} variant="outlined" label="Name" size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            {/* <TextField value={productData.ItemType} onChange={handleChange('ItemType')} variant="outlined" label="商品类型" size="small" /> */}
                             <FormControl className={classes.inner} required>
-                                <InputLabel htmlFor="age-native-required">商品类型</InputLabel>
+                                <InputLabel htmlFor="age-native-required">Type</InputLabel>
                                 <Select
                                     native
                                     variant='outlined'
                                     value={productData.ItemType}
                                     onChange={handleChange('ItemType')}
-                                    name="type"
+                                    name="Type"
                                     inputProps={{
                                         id: 'type-native-required',
                                     }}
@@ -167,15 +181,15 @@ const NewProduct = (props) => {
                             </FormControl>
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField className={classes.inner} required value={productData.ItemQuantity} onChange={handleChange('ItemQuantity')} type='number' variant="outlined" label="商品数量" size="small" />
+                            <TextField className={classes.inner} required value={productData.ItemQuantity} onChange={handleChange('ItemQuantity')} type='number' variant="outlined" label="Quantity" size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
                             <TextField
-                            className={classes.inner}
+                                className={classes.inner}
                                 required
                                 type='number'
                                 variant="outlined"
-                                label="商品价格"
+                                label="Price"
                                 value={productData.ItemPrice}
                                 onChange={handleChange('ItemPrice')}
                                 InputProps={{
@@ -184,7 +198,7 @@ const NewProduct = (props) => {
                                 size="small" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
-                            <TextField required className={classes.description} value={productData.ItemDescription} onChange={handleChange('ItemDescription')} variant="outlined" label="商品描述" size="large" />
+                            <TextField required className={classes.description} value={productData.ItemDescription} onChange={handleChange('ItemDescription')} variant="outlined" label="Description" size="large" />
                         </Grid>
                         <Grid className={classes.content} item xs={12}>
                             <input
@@ -207,17 +221,17 @@ const NewProduct = (props) => {
                         </Grid>
                         <Grid item container xs={12}>
                             <Grid className={classes.content} item xs={6}>
-                                <Button variant="contained" onClick={props.handleClose}>取消</Button>
+                                <Button variant="contained" onClick={props.handleClose}>Cancel</Button>
                             </Grid>
                             <Grid className={classes.content} item xs={6}>
-                                <Button variant="contained" color="secondary" onClick={ensurePublish}>确认发布</Button>
+                                <Button variant="contained" color="secondary" onClick={ensurePublish}>Publish</Button>
                             </Grid>
                         </Grid>
                     </Grid>
                 </DialogContent>
             </Dialog>
-            <Notify open={notifyOpen} message={'发布成功'} type={'success'} handleClose={handleNotifyClose} />
-            <Notify open={notifyOpen2} message={'请上传图片'} type={'error'} handleClose={handleNotifyClose2} />
+            <Notify open={notifyOpen} message={'Success'} type={'success'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen2} message={'Please upload image of the product!'} type={'error'} handleClose={handleNotifyClose2} />
         </div>
     )
 }

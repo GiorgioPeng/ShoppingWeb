@@ -11,7 +11,8 @@ import Button from '@material-ui/core/Button'
 import linkTo from '../../compents/LinkTo'
 import sendPost from '../../api/sendPost'
 import CircularIndeterminate from '../../compents/CircularIndeterminate'
-// 这个页面用来展示用户的一些数据, 比如交易记录
+
+// define CSS of root component
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: '10px auto',
@@ -19,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
     width: '85%'
   },
 }));
+
+// define CSS of base info component
 const useBaseInfoStyles = makeStyles((theme) => ({
   image: {
     borderRadius: '50%',
@@ -39,6 +42,11 @@ const useBaseInfoStyles = makeStyles((theme) => ({
   },
 }));
 
+// base infomation component
+// --
+// props: from parent component, must include loginInfo
+// --
+// return: HTML elements
 function BaseInfo(props) {
   const classes = useBaseInfoStyles();
   const { loginInfo } = props
@@ -89,25 +97,27 @@ function BaseInfo(props) {
 
 function Index(props) {
   const classes = useStyles();
-  const {loginInfo,setLoginInfo} = props;
+  const { loginInfo, setLoginInfo } = props;
   const [backDropOpen, setBackdropOpen] = React.useState(false);
   const [sellList, setSellList] = React.useState([])
   const [buyList, setBuyList] = React.useState([])
   React.useEffect(() => {
+    // send three requests to the backend
+    // get the information of all items which is published by current user
+    // get the information of all orders of current user
+    // get the information of deposit of current user
+    // set the state of the component
     const getInfo = async () => {
       setBackdropOpen(true)
+
       const res = await sendPost('back_end_war_exploded/MyAllItem')
-      console.log('MyAllItem')
-      console.log(res)
       setSellList(res.Item)
 
       const res2 = await sendPost('back_end_war_exploded/PurchaseInformation')
-      console.log('PurchaseInformation')
-      console.log(res2)
       setBuyList(res2.Item)
 
-      const res3 = await sendPost('back_end_war_exploded/GetDeposit',`PhoneNumber=${loginInfo.PhoneNumber}`)
-      setLoginInfo((previous)=>{return {...previous,'Deposit':res3.deposit}})
+      const res3 = await sendPost('back_end_war_exploded/GetDeposit', `PhoneNumber=${loginInfo.PhoneNumber}`)
+      setLoginInfo((previous) => { return { ...previous, 'Deposit': res3.deposit } })
       setBackdropOpen(false)
     }
     getInfo()
@@ -122,7 +132,7 @@ function Index(props) {
       <Divider />
       <Divider />
       <Typography variant="subtitle1" color="textSecondary">
-        发布的商品
+        Published Products List
       </Typography>
       <SellerListProducts sellList={sellList} />
       <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />

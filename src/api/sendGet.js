@@ -1,4 +1,11 @@
 import url from './baseUrl'
+
+// set the GET request format
+// --
+// posifix: the api of backend
+// data: data, the format like  A=1&B=2... 
+// --
+// return: Object
 const sendGet = async (postfix, data) => {
     let des = url + postfix
     if (data) {
@@ -7,8 +14,8 @@ const sendGet = async (postfix, data) => {
     const responded = await fetch(des, {
         cache: 'no-cache',
         credentials: 'include',
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
+        method: 'GET', 
+        mode: 'cors', 
     }).then(response => response.json())
     return responded;
 }

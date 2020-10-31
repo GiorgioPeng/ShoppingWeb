@@ -3,10 +3,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
+// define CSS
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -15,9 +12,23 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-// type: error|warning|info|success
-// 需要给出的参数 open, handleClose, type, message
-export default function Notify(props) {
+
+// alert component
+// --
+// props: from parent component
+// --
+// return: HTML elements
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+
+// Notify component
+// --
+//props: from parent component, must inlude type,open,handleClose and message
+// --
+// return: HTML elements
+function Notify(props) {
   const classes = useStyles();
 
   return (
@@ -30,3 +41,4 @@ export default function Notify(props) {
     </div>
   );
 }
+export default Notify;

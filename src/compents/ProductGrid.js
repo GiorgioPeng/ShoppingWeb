@@ -3,19 +3,23 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import SingleProduct from './SingleProduct'
 import changer from '../compents/ChangeImgUrl'
-// import data from '../pages/index/tileData'
-// 用于展示多个商品
+
+// define CSS
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         margin: '10px auto',
         marginTop: theme.spacing(5),
         backgroundColor: 'white',
-        width: '80%',//到时候这里可以按照图片宽度的四倍设置
+        width: '80%',
     },
 }));
 
-
+// create HTML elements to display each product
+// --
+// props: from parent component, must include itemData and loginInfo
+// -- 
+// return: HTML elements
 const CreateItem = (props) => {
     const { itemData,loginInfo } = props
     let tempArr = []
@@ -30,7 +34,6 @@ const CreateItem = (props) => {
         }
     }
     tempArr.push(tempTempArr)
-    // console.log(tempArr)
     return (
         <Grid container spacing={1} alignContent='center' alignItems='center' justify='center'>
             {
@@ -63,7 +66,11 @@ const CreateItem = (props) => {
     )
 }
 
-
+// Product Grid component
+// --
+// props: from parent component, must include itemData and loginInfo
+// --
+// return: HTML element
 function ProductGrid(props) {
     const { itemData,loginInfo } = props
     const classes = useStyles();

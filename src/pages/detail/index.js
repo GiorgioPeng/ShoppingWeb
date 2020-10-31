@@ -10,8 +10,8 @@ import Notify from '../../compents/Notify'
 import CircularIndeterminate from '../../compents/CircularIndeterminate'
 import sendPost from '../../api/sendPost'
 import changer from '../../compents/ChangeImgUrl'
-// 这个页面用来展示商品的详情信息, 比如淘宝点击进去一个鞋子,可以进行选择大小
-// TODO OneItem 接口没有返回ItemID
+
+// define CSS
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: '10px auto',
@@ -41,6 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// show detail of a product component
+// --
+// props: from parent component
+// --
+// return: HTML elements
 function Index(props) {
   const classes = useStyles();
   const id = props.match.params.identify
@@ -53,55 +58,58 @@ function Index(props) {
   const [notifyOpen4, setNotifyOpen4] = React.useState(false);
   const [backDropOpen, setBackdropOpen] = React.useState(false);
   const [quantity, setQuantity] = React.useState(1)
-  const handleClick = async() => {
-      const data = `ItemID=${id}`
-      const res = await sendPost('/back_end_war_exploded/Like', data)
-      if (res.answer === 'true') {
-        setNotifyOpen(true);
-      }
-      else{
-        setNotifyOpen4(true)
-      }
+
+  // send a request to backend to star a product and nofity user
+  const handleClick = async () => {
+    const data = `ItemID=${id}`
+    const res = await sendPost('/back_end_war_exploded/Like', data)
+    if (res.answer === 'true') {
+      setNotifyOpen(true);
+    }
+    else {
+      setNotifyOpen4(true)
+    }
   };
 
-
-  const handleNotifyClose = ()=>{
+  // close notify  when star success
+  const handleNotifyClose = () => {
     setNotifyOpen(false)
   }
 
-
-  const handleNotifyClose2 = ()=>{
+  // close notify when star failed
+  const handleNotifyClose2 = () => {
     setNotifyOpen2(false)
   }
 
-
-  const handleNotifyClose3 = ()=>{
+  // close notify when buying success
+  const handleNotifyClose3 = () => {
     setNotifyOpen3(false)
   }
 
-  const handleNotifyClose4 = ()=>{
+  // close notify when buying failed
+  const handleNotifyClose4 = () => {
     setNotifyOpen4(false)
   }
 
+  // send a request to backend when user buy a product and notify user
   const buy = async () => {
     const data = `ItemID=${id}&ItemQuantity=${quantity}`
     const res = await sendPost('/back_end_war_exploded/Purchase', data)
     console.log(res)
-    if(res.answer==='true'){
+    if (res.answer === 'true') {
       setNotifyOpen2(true)
     }
-    else{
+    else {
       setNotifyOpen3(true)
     }
-    // setProduct(res)
   }
 
   React.useEffect(() => {
+    // get item infor when load the page at first time, and set the state of the component
     const getItemInfo = async () => {
       setBackdropOpen(true)
       const data = `ItemID=${id}`
       const res = await sendPost('/back_end_war_exploded/OneItem', data)
-      console.log(res)
       setBackdropOpen(false)
       setProduct(res)
     }
@@ -110,8 +118,8 @@ function Index(props) {
 
   React.useEffect(() => {
     setIdentify(id)
-    // setProduct(tileData.filter((e) => e.title === identify)[0])
   }, [identify, id])
+  
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -154,17 +162,17 @@ function Index(props) {
                   }}
                 />
                 <Typography variant="subtitle1" color='error'>
-                  单个价格: ${product?.ItemPrice}
+                  price: ${product?.ItemPrice}
                 </Typography>
                 <br />
                 <br />
 
                 <Typography variant="subtitle1" color='error'>
-                  剩余数量: {product?.ItemQuantity}
+                  remain: {product?.ItemQuantity}
                 </Typography>
                 <br />
                 <Typography variant="subtitle2" color='error'>
-                  总价: ${sumPrice}
+                  total price: ${sumPrice}
                 </Typography>
               </Grid>
 
@@ -175,7 +183,7 @@ function Index(props) {
                     </Button>
                 </Grid>
                 <Grid item xs={4}>
-                  <Button variant='contained' onClick={()=>handleClick()}>
+                  <Button variant='contained' onClick={() => handleClick()}>
                     加入收藏
                   </Button>
                 </Grid>

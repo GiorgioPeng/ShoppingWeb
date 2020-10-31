@@ -15,9 +15,11 @@ import Star from './pages/star'
 import Detail from './pages/detail'
 import Register from './pages/register'
 import ChangePassword from './pages/changePassword'
-// 这是这个项目的入口
 
 
+// root component
+// -- 
+// return: HTML element
 function App() {
   const [loginInfo, setLoginInfo] = React.useState(null)
 
@@ -26,7 +28,7 @@ function App() {
   const [searchText, setSearchText] = React.useState([])
 
   React.useEffect(() => {
-    console.log(loginInfo)
+    // re-render the page
   }, [loginInfo])
 
   return (
@@ -80,7 +82,6 @@ function App() {
           <Route path="/register" component={() => (<Register setLoginInfo={setLoginInfo} />)} />
           <Redirect to="/shoppingweb"></Redirect>
         </Switch>
-
       </Router>
     </div >
   );

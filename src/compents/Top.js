@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
-// import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined';
 import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
@@ -14,12 +13,12 @@ import Notify from './Notify';
 import CircularIndeterminate from './CircularIndeterminate';
 import Button from '@material-ui/core/Button'
 import sendPost from '../api/sendPost';
-// TODO 监控用户登陆情况
+
+// define CSS
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  // 后期通过对滚动的判定将这个条吸顶 删掉 appbar 组件中的 position="static"
   root_fixed: {
     position: 'fixed',
     zIndex: '999'
@@ -67,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -91,21 +89,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end',
     fontSize: '15px',
     position: 'relative',
-    // '&:before': {
-    //   content: `""`,
-    //   width: theme.spacing(1),
-    //   borderRight: '1px solid #333',
-    //   position: 'absolute',
-    //   left: '120%',
-    //   top: '-50%',
-    //   height: "200%"
-    // }
   },
   searchButton: {
     marginLeft: theme.spacing(1)
   }
 }));
 
+// top functionality bar component
+// props: from parent component, must include link, setItemData, setLoginInfo, inputText and setInputText
+// --
+// return: HTML elements
 function Top(props) {
   const Link = props.link;
   const setItemData = props.setItemData
@@ -114,23 +107,31 @@ function Top(props) {
   const setInputText = props.setInputText
   const classes = useStyles();
   const [notifyOpen, setNotifyOpen] = React.useState(false)
-  // const [inputText, setInputText] = React.useState('')
+
+  // open notify
   const handleNotifyOpen = () => {
     if (!props.loginInfo)
       setNotifyOpen(true)
   }
+
+  // synchronize input value and the component state
+  // -- 
+  // event: the input event
   const handleInput = (event) => {
     setInputText(event.target.value)
   }
 
+  // send request to the backend to search a detail information of it
   const searchItems = async () => {
     setBackdropOpen(true)
     const res = await sendPost('/back_end_war_exploded/FindItem', 'ItemName=' + inputText)
     setItemData(res.Item)
     setBackdropOpen(false);
-    console.log(res.Item)
   }
+
   const [backDropOpen, setBackdropOpen] = React.useState(false);
+
+  // close the nofity
   const handleNotifyClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -138,15 +139,18 @@ function Top(props) {
 
     setNotifyOpen(false);
   };
+
+  // logout
   const logout = () => {
     setLoginInfo(null)
   }
+  
   return (
     <div className={classes.root}>
       <AppBar className={classes.bar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            {props.loginInfo ? `Hello, ${props.loginInfo.AccountName}` : `Online shopping of Scott Piao`}
+            {props.loginInfo ? `Hello, ${props.loginInfo.AccountName}` : `Freedom Online Shopping Mart`}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -171,9 +175,6 @@ function Top(props) {
             <Link onClick={handleNotifyOpen} to="/userinfo">
               <span className={classes.buttonsText}>User Info<PermIdentityOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
-            {/* <Link onClick={handleNotifyOpen} to="/shoppingcar">
-              <span className={classes.buttonsText}>Shopping Car<ShoppingCartOutlinedIcon style={{ fontSize: 16 }} /></span>
-            </Link> */}
             <Link onClick={handleNotifyOpen} to="/star">
               <span className={classes.buttonsText}>Star<GradeOutlinedIcon style={{ fontSize: 16 }} /></span>
             </Link>
@@ -186,11 +187,10 @@ function Top(props) {
                 <span className={classes.buttonsText}>Login<VpnKeyOutlinedIcon style={{ fontSize: 16 }} /></span>
               </Link>
             }
-            {/* <Link to="/">Logout</Link>这里默认是隐藏的 */}
           </div>
         </Toolbar>
       </AppBar>
-      <Notify open={notifyOpen} message={'请先登录'} type={'warning'} handleClose={handleNotifyClose} />
+      <Notify open={notifyOpen} message={'Please Login!'} type={'warning'} handleClose={handleNotifyClose} />
       <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
     </div >
   );

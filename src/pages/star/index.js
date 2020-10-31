@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import StarList from './StarList'
 import sendGet from '../../api/sendGet'
-// 这个页面用来显示用户收藏的商品
+
+// define CSS
 const useStyle = makeStyles(theme => ({
     root: {
         margin: '10px auto',
@@ -11,11 +12,18 @@ const useStyle = makeStyles(theme => ({
         width: '80%'
     }
 }))
+
+// star list component
+// --
+// props: from parent component, must include loginInfo
+// --
+// return: HTML elements
 function Index(props) {
     const { loginInfo } = props;
     const classes = useStyle()
     const [starList,setStarList] = React.useState([])
     React.useEffect(() => {
+        // send a request to the backend to get star list information when the login state is changed
         const getStarList = async () => {
             if (loginInfo) {
                 const res = await sendGet('/back_end_war_exploded/AllCollections')
@@ -25,7 +33,7 @@ function Index(props) {
         getStarList()
     }, [loginInfo])
     React.useEffect(()=>{
-        console.log(starList)
+        // re-render the page if the starlist is changed
     },[starList])
     return (
         <div className={classes.root}>

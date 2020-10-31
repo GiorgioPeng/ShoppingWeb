@@ -14,6 +14,7 @@ import encrypt from '../../compents/Encrypt'
 import linkTo from '../../compents/LinkTo'
 import CircularIndeterminate from '../../compents/CircularIndeterminate'
 
+// define CSS
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: '10px auto',
@@ -32,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+// register component
+// --
+// props: from parent component, must include setLoginInfo
+// --
+// return: HTML elements
 function Index(props) {
     const classes = useStyles();
 
@@ -39,20 +45,21 @@ function Index(props) {
 
     const [notifyOpen, setNotifyOpen] = React.useState(
         {
-            open:false,
-            message:''
+            open: false,
+            message: ''
         }
     );
 
+    // open nofity
     const handleNotifyOpen = (message) => {
         setNotifyOpen(
             {
-                open:true,
-                message:message
+                open: true,
+                message: message
             }
         )
     }
-
+    // close nofity
     const handleNotifyClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -60,10 +67,10 @@ function Index(props) {
 
         setNotifyOpen(
             {
-                open:false,
-                message:''
+                open: false,
+                message: ''
             }
-            );
+        );
     };
     const [values, setValues] = React.useState({
         PhoneNumber: '',
@@ -73,37 +80,42 @@ function Index(props) {
         Deposit: '',
         showPassword: false
     });
+    
+    // synchronize input value and the state of the component
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
+
+    // change whether show the password
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
 
+    // prevent the default which is defined by the browser
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
 
+    // send a request to the backend, when user choose submit the form
+    // if the regist is success, then login and skip to the index page
+    // if the regist is failed, notify the reason to the user
     const handleSubmit = async () => {
         setBackdropOpen(true)
         const data = `PhoneNumber=${values.PhoneNumber}&Name=${values.Name}&AccountName=${values.AccountName}&Password=${encrypt(values.Password)}&Deposit=${values.Deposit}`
         const res = await sendPost('back_end_war_exploded/regist', data)
         setBackdropOpen(false)
-        console.log(res)
         if (res.answer === 'true') {
             const data2 = `PhoneNumber=${values.PhoneNumber}&Password=${encrypt(values.Password)}`
             const res2 = await sendPost('back_end_war_exploded/Login', data2)
-            //注册之后直接登陆
             if (res2.answer === 'true') {
                 linkTo('shoppingweb', () => { props.setLoginInfo(res2.AccountInformation[0]) })
             }
-            console.log('注册成功')
         }
         else if (res.answer === 'exist') {
-            handleNotifyOpen('该手机号已经注册');
+            handleNotifyOpen('The phone number is already registed!');
         }
         else {
-            handleNotifyOpen('请检查各项输入格式');
+            handleNotifyOpen('Illegal password!');
         }
     }
     return (
@@ -188,9 +200,9 @@ function Index(props) {
 
                 />
             </FormControl>
-            <Button onClick={handleSubmit} color='secondary' variant='contained'>确认注册</Button>
+            <Button onClick={handleSubmit} color='secondary' variant='contained'>Regist</Button>
             <Notify open={notifyOpen.open} message={notifyOpen.message} type={'error'} handleClose={handleNotifyClose} />
-            <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
+            <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
         </div>
     )
 }

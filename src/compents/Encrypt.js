@@ -1,4 +1,7 @@
 import CryptoJs from 'crypto-js';
+// encrypt password
+// inputText: string
+// return: string with Base64 formate
 const Encrypt = (inputText) => {
     const ciphertext = CryptoJs.AES.encrypt(inputText,
         CryptoJs.enc.Utf8.parse('wwwwwwwwwwwwwww1wwwwwwwwwwwwwww1'),

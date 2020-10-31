@@ -11,14 +11,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Notify from './Notify'
 import sendPost from '../api/sendPost'
 import linkTo from '../compents/LinkTo'
-// 用于显示单个商品的卡片
-// TODO 一般而言需要接受父组件传过来的数据
+
+// define CSS
 const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 280,
         height: '350px',
         padding: theme.spacing(2),
-        // transform:'scale(0.8)',
         '&:hover': {
             outline: 'red 1px solid'
         },
@@ -36,14 +35,23 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center'
     }
 }));
+
+// single product display component
+// --
+// props: from parent component, must include loginInfo, img, ItemID, name, price and description
+// --
+// return: HTML elements
 function SingleProduct(props) {
     const { loginInfo } = props
     const classes = useStyles();
     const [notifyOpen, setNotifyOpen] = React.useState(false)
+    
+    // open the notify
     const handleNotifyOpen = () => {
         setNotifyOpen(true)
     }
 
+    // close the notify
     const handleNotifyClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -52,17 +60,21 @@ function SingleProduct(props) {
         setNotifyOpen(false);
     };
     const { img, ItemID, name, price, description } = props
+
+    // send request to backend, to star a item
     const star = async () => {
         if (loginInfo) {
             const data = `ItemID=${ItemID}`
             const res = await sendPost('/back_end_war_exploded/Like', data)
             if (res.answer === 'true') {
-                console.log('收藏成功')
+                console.log('success')
             }
         }
     }
 
-    // 点击收藏的动画
+    // display the animation of click star icon and notify whether star operation is success
+    // --
+    // e: click event
     const handleStar = (e) => {
         if (loginInfo) {
             let temp = document.createElement('div');
@@ -89,7 +101,10 @@ function SingleProduct(props) {
             handleNotifyOpen()
         }
     }
-    // 点击商品(信息获取在detail组件里)
+
+    // skip to the detail page of a product and nofity user
+    // --
+    // event: the click event
     const handleProduct = (event) => {
         if (loginInfo) {
             let destination = 'shoppingweb/detail/' + event.target.getAttribute('identify')
@@ -131,7 +146,7 @@ function SingleProduct(props) {
                     <StarRateIcon color="secondary" />
                 </IconButton>
             </CardActions>
-            <Notify open={notifyOpen} message={'请登陆'} type={'error'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen} message={'Please Login!'} type={'error'} handleClose={handleNotifyClose} />
         </Card>
     );
 }

@@ -1,3 +1,8 @@
+// transfer the relative path of a image to a url
+// --
+// imgUrl: a relative path of a image
+// --
+// return: the url of the image
 const changer = (imgUrl)=>{
     try{
     imgUrl.replace(`\\`, '/')

@@ -3,7 +3,12 @@ import ProductGrid from '../../compents/ProductGrid'
 import Kind from '../../compents/Kind'
 import sendPost from '../../api/sendPost'
 import CircularIndeterminate from '../../compents/CircularIndeterminate'
-// 这个是这个项目的首页
+
+// the index page of the system 
+// --
+// props: from parent component, must include itemData, setItemData, searchText, setSearchText and loginInfo
+// --
+// return: HTML elements
 function Index(props) {
 
     const [backDropOpen, setBackdropOpen] = React.useState(false);
@@ -11,19 +16,16 @@ function Index(props) {
     const {itemData, setItemData, searchText, setSearchText, loginInfo} = props
 
     React.useEffect(() => {
+        // get all item infomation from backend and set state of the component
         const getProductsInfo = async () => {
             setBackdropOpen(true)
             const res = await sendPost('back_end_war_exploded/AllItems')
             if (res) {
-                console.log('in Index ')
                 const temp = res.Item
-                console.log(temp)
                 setItemData((previous) => { previous.push(...temp); return previous })
-                // setItemData('abc')
             }
             setBackdropOpen(false)
         }
-        // setItemData(getProductsInfo())
         getProductsInfo()
     }, [])
 
@@ -31,7 +33,6 @@ function Index(props) {
     return (
         <div>
             <Kind setItemData={setItemData} setSearchText={setSearchText} searchText={searchText}/>
-            {/* <TodayRecommand /> */}
             <ProductGrid loginInfo={loginInfo} itemData={itemData} />
             <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
         </div>

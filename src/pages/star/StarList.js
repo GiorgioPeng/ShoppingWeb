@@ -11,8 +11,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import changer from '../../compents/ChangeImgUrl';
 import sendPost from '../../api/sendPost'
-import linkTo from '../../compents/LinkTo'
-// 用来展示商品列表
+import linkTo from '../../compents/LinkTo';
+import Typography from '@material-ui/core/Typography';
+
+// define CSS
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: '10px auto'
@@ -25,32 +27,42 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
+// list product component
+// --
+// props: from the parent component, must include starList
+// --
+// return: HTML elements.
 function ListProducts(props) {
     const { starList } = props
     const classes = useStyles();
 
+    // send a request to the backend
+    // if the user remove a product from his star list
+    // and skip to the index page
+    // --
+    // item: Object, the item information
     const dislike = async (item) => {
-        const res = await sendPost("/back_end_war_exploded/Dislike", `ItemID=${item.ItemID}`)
+        await sendPost("/back_end_war_exploded/Dislike", `ItemID=${item.ItemID}`)
         linkTo('shoppingweb')
-        console.log(res)
     }
 
+    // skip to the detail page of a product
     const handleBuy = (itemID) => {
         let destination = 'shoppingweb/detail/' + itemID
         linkTo(destination)
     }
+
     return (
         <div className={classes.root}>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>商品名称</TableCell>
-                            <TableCell align="left">商品图片</TableCell>
-                            <TableCell align="right">商品价格</TableCell>
-                            <TableCell align="right">数量</TableCell>
-                            <TableCell align="right">类型</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="left">Picture</TableCell>
+                            <TableCell align="right">Price</TableCell>
+                            <TableCell align="right">Remain</TableCell>
+                            <TableCell align="right">Type</TableCell>
                             <TableCell align="right"> </TableCell>
                             <TableCell align="right"> </TableCell>
                         </TableRow>
@@ -76,19 +88,19 @@ function ListProducts(props) {
                                             <TableCell align="right">{row.ItemQuantity}</TableCell>
                                             <TableCell align="right">{row.ItemType}</TableCell>
                                             <TableCell align="right">
-                                                <Button variant="contained" onClick={() => handleBuy(row.ItemID)}>立即购买</Button>
+                                                <Button variant="contained" onClick={() => handleBuy(row.ItemID)}>Buy</Button>
                                             </TableCell>
                                             <TableCell>
-                                                <Button variant="contained" color='secondary' onClick={() => dislike(row)}>删除</Button>
+                                                <Button variant="contained" color='secondary' onClick={() => dislike(row)}>Delete</Button>
                                             </TableCell>
                                         </TableRow>
                                     ))
                                 )
                                     :
-                                    <p>您还未收藏任何商品</p>
+                                    <Typography  variant="subtitle1" color="textPrimary">There is no record!</Typography>
                             )
                             :
-                            <p>您还未收藏任何商品</p>
+                            <Typography  variant="subtitle1" color="textPrimary">There is no record!</Typography>
                         }
                     </TableBody>
                 </Table>

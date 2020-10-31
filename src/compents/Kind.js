@@ -4,7 +4,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import sendPost from '../api/sendPost';
 import CircularIndeterminate from './CircularIndeterminate';
-// 这个页面用于分类
+
+// define the CSS
 const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: theme.spacing(10),
@@ -18,43 +19,55 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// Classification Component
+// -- 
+// props: from parent component, must inlude setItemData and setSearchText
+// --
+// return: HTML elements
 function Kind(props) {
-    const {setItemData,setSearchText } = props
+    const { setItemData, setSearchText } = props
     const classes = useStyles();
-    const arr = ['clothes', 'toy', 'digital', 'medicine', 'car', 'baby', 'house', 'book', 'snack', 'tool']
     const [backDropOpen, setBackdropOpen] = React.useState(false);
+    
+    // type labels array
+    const arr = ['clothes', 'toy', 'digital', 'medicine', 'car', 'baby', 'house', 'book', 'snack', 'tool']
+
     const [states, setStates] = useState(
         arr.map(i => { return { name: i, value: false } })
     )
 
-
-    const findItem = async (i) => {
+    // get a item information based on product type
+    // --
+    // typeLabel: string, a type label
+    const findItem = async (typeLabel) => {
         setSearchText('')
         await setStates(
             states.map(el => {
-                if (el.name === i) {
+                if (el.name === typeLabel) {
                     el.value = !el.value
                 }
                 return el
             })
         )
-        let temp = arr.map((i,index)=>states[index].value?i:'')
+        let temp = arr.map((typeLabel, index) => states[index].value ? typeLabel : '')
         temp = temp.join(',')
         setBackdropOpen(true)
         const res = await sendPost('/back_end_war_exploded/FindItem', 'ItemType=' + temp)
         setBackdropOpen(false);
-        console.log(res.Item)
         setItemData(res.Item)
     }
 
-    //此处后端需要给一个图片的url
+    // create HTML elements of each type label
+    // -- 
+    // arr: type label array
+    // --
+    // return: HTML elements
     const createKind = (arr) => {
         return arr.map((i) => {
             return <Chip size="small" label={i}
                 avatar={<Avatar alt={i} src={`${process.env.PUBLIC_URL}/${i}.png`} />}
                 clickable
                 color={states.filter((el) => el.name === i)[0].value ? "primary" : "default"}
-                // 这里是点击标签的逻辑
                 onClick={() => findItem(i)}
                 key={i}
             />

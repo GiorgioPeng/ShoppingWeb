@@ -17,9 +17,8 @@ import Button from '@material-ui/core/Button';
 import linkTo from '../../compents/LinkTo'
 import encrypt from '../../compents/Encrypt'
 import CircularIndeterminate from '../../compents/CircularIndeterminate'
-// 这个页面用来写登陆页面
 
-
+// define CSS
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100vh',
@@ -59,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         height: 100,
         [theme.breakpoints.down('xs')]: {
-            width: '100% !important', // Overrides inline-style
+            width: '100% !important',
             height: 100,
         },
         '&:hover, &$focusVisible': {
@@ -102,6 +101,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// login component
+// --
+// props: from parent component, must include setLoginInfo
+// --
+// return: HTML elements
 function Index(props) {
     const classes = useStyles();
     const [values, setValues] = React.useState({
@@ -116,35 +120,38 @@ function Index(props) {
 
     const [notifyOpen, setNotifyOpen] = React.useState(false);
 
+    // open notify of incorrect password or phone number
     const handleNotifyOpen = () => {
         setNotifyOpen(true)
     }
 
+    // close notify of incorrect password or phone number
     const handleNotifyClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
         setNotifyOpen(false);
     };
+
+    // send request to backend when user submit the form, notify user and skip to the index page of the system
     const submit = async () => {
-        // const url = 'http://47.103.207.168:8081/back_end_war_exploded/Login'
-        // PhoneNumber=15288850612&password=123456
         setBackdropOpen(true)
         const data = `PhoneNumber=${values.PhoneNumber}&Password=${encrypt(values.password)}`
-        // const data = `PhoneNumber=${values.PhoneNumber}&Password=${values.password}`
         const res = await sendLoginPost('/back_end_war_exploded/Login', data)
         setBackdropOpen(false);
-        console.log(res)
         if (res.answer === 'true') {
-            linkTo('shoppingweb',()=>{props.setLoginInfo(res.AccountInformation[0])})
+            linkTo('shoppingweb', () => { props.setLoginInfo(res.AccountInformation[0]) })
         }
         else {
             handleNotifyOpen();
         }
     }
 
+    // synchronize the value and state of the component
+    // --
+    // prop: the name of one state of the component, which should be modify
     const handleChange = (prop) => (event) => {
-        if (event.target.value.length >= 4 && prop === 'password') {
+        if (event.target.value.length >= 3 && prop === 'password') {
             setValues({ ...values, [prop]: event.target.value, showButton: true });
             return;
         }
@@ -152,29 +159,41 @@ function Index(props) {
             setValues({ ...values, [prop]: event.target.value });
         }
     };
+
+    // change the state of whether show password
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
 
+    // prevent the default which is defined by the browser
+    // --
+    // event: the event 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+
+    // change the state of whether show password input dialog
     const handleClickShowPasswordInput = () => {
         setValues({ ...values, showPasswordInput: !values.showPasswordInput });
     };
 
+    // prevent the default which is defined by the browser
+    // --
+    // event: the event
     const handleMouseDownPasswordInput = (event) => {
         event.preventDefault();
     };
-    
-    const register = ()=>{
+
+    // go to the register page
+    const register = () => {
         linkTo('register')
     }
+    
     return (
         <div className={classes.root}>
             <div className={classes.bgdrop}>
                 <div className={classes.rootForm}>
-                    <FormControl  variant="outlined">
+                    <FormControl variant="outlined">
                         <InputLabel htmlFor="PhoneNumber">Phone number</InputLabel>
                         <OutlinedInput
                             id="PhoneNumber"
@@ -244,13 +263,13 @@ function Index(props) {
                         </span>
                     </ButtonBase>
                     <Typography variant='subtitle2' color="textSecondary">
-                        没有账号?
-                        <Button onClick={register} setLoginInfo={props.setLoginInfo}>立即注册</Button>
+                        Do not have an account?
+                        <Button onClick={register} setLoginInfo={props.setLoginInfo}>regist</Button>
                     </Typography>
                 </div>
             </div>
-            <CircularIndeterminate backDropOpen={backDropOpen} handle={()=>setBackdropOpen(false)}/>
-            <Notify open={notifyOpen} message={'用户名或密码错误'} type={'error'} handleClose={handleNotifyClose} />
+            <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
+            <Notify open={notifyOpen} message={'Incorrect Phone Number or Password'} type={'error'} handleClose={handleNotifyClose} />
         </div>
     )
 }

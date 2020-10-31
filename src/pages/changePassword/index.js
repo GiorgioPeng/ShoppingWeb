@@ -15,6 +15,8 @@ import Notify from '../../compents/Notify'
 import linkTo from '../../compents/LinkTo'
 import encrypt from '../../compents/Encrypt'
 
+
+// define CSS
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100vh',
@@ -40,14 +42,14 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px',
         opacity: '0.8'
     },
-    input:{
-        marginTop:theme.spacing(2)
+    input: {
+        marginTop: theme.spacing(2)
     },
     image: {
         position: 'relative',
         height: 100,
         [theme.breakpoints.down('xs')]: {
-            width: '100% !important', // Overrides inline-style
+            width: '100% !important',
             height: 100,
         },
         '&:hover, &$focusVisible': {
@@ -87,6 +89,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+// change password component
+// --
+// props: from parent component
+// --
+// return: HTML elements
 function Index(props) {
     const classes = useStyles();
     const [values, setValues] = React.useState({
@@ -97,10 +105,11 @@ function Index(props) {
     const [notifyOpen, setNotifyOpen] = React.useState(false);
     const [notifyOpen2, setNotifyOpen2] = React.useState(false);
 
+    // open notify of incorrect password
     const handleNotifyOpen = () => {
         setNotifyOpen(true)
     }
-
+    // close notify of incorrect password
     const handleNotifyClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -109,10 +118,12 @@ function Index(props) {
         setNotifyOpen(false);
     };
 
+    // open notify of success
     const handleNotifyOpen2 = () => {
         setNotifyOpen2(true)
     }
 
+    // close notify of success
     const handleNotifyClose2 = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -120,26 +131,34 @@ function Index(props) {
 
         setNotifyOpen2(false);
     };
+
+    // send request to backend with the old password and new password
+    // and according macro-task queue to skip to the index pages
     const submit = async () => {
         const data = `OldPassword=${encrypt(values.OldPassword)}&NewPassword=${encrypt(values.NewPassword)}`
         const res = await sendPost('/back_end_war_exploded/ChangePassword', data)
-        console.log(res)
         if (res.answer === 'true') {
             handleNotifyOpen2()
-            setTimeout(()=>linkTo('shoppingweb'),1500)
+            setTimeout(() => linkTo('shoppingweb'), 1500)
         }
         else {
             handleNotifyOpen();
         }
     }
 
+    // synchronize input value and component state
+    // --
+    // prop: the name of something in the component state, which should be modify
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
+
+    // set whether show the password
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
 
+    // prevent the default event which is defined by the browser
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
@@ -215,15 +234,15 @@ function Index(props) {
                                 color="inherit"
                                 className={classes.imageTitle}
                             >
-                                <b>确定更改</b>
+                                <b>Change Password</b>
                                 <span className={classes.imageMarked} />
                             </Typography>
                         </span>
                     </ButtonBase>
                 </div>
             </div>
-            <Notify open={notifyOpen} message={'密码错误'} type={'error'} handleClose={handleNotifyClose} />
-            <Notify open={notifyOpen2} message={'修改密码成功'} type={'success'} handleClose={handleNotifyClose2} />
+            <Notify open={notifyOpen} message={'Incorrect Password!'} type={'error'} handleClose={handleNotifyClose} />
+            <Notify open={notifyOpen2} message={'Success!'} type={'success'} handleClose={handleNotifyClose2} />
         </div>
     )
 }
