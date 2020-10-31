@@ -57,7 +57,7 @@ function BaseInfo(props) {
           <Avatar
             className={classes.large}
             alt='user'
-            src={`${process.env.PUBLIC_URL}/car.png`}
+            src={`${process.env.PUBLIC_URL}/ava.png`}
           />
         </ButtonBase>
       </Grid>
