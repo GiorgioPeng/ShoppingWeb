@@ -49,14 +49,21 @@ function Kind(props) {
                 return el
             })
         )
-        let temp = arr.map((typeLabel, index) => states[index].value ? typeLabel : '')
-        temp = temp.join(',')
         setBackdropOpen(true)
+        let temp = arr.map((typeLabel, index) => states[index].value ? typeLabel : '')
+        for(let i = 0;i<temp.length;i++){
+            if(temp[i]===''){
+                temp.splice(i,1)
+                i--;
+            }
+        }
+        
         let res;
-        if (temp.length === 0) {
-            res = await sendPost('/back_end_war_exploded/FindItem',`ItemName=`)
+        if (temp.length===0) {
+            res = await sendPost('/back_end_war_exploded/FindItem', `ItemName=`)
         }
         else {
+            temp = temp.join(',')
             res = await sendPost('/back_end_war_exploded/FindItem', 'ItemType=' + temp)
         }
         setBackdropOpen(false);
