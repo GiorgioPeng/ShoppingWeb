@@ -120,6 +120,10 @@ function Index(props) {
     setIdentify(id)
   }, [identify, id])
   
+  React.useEffect(()=>{
+    setSumPrice(product.ItemPrice)
+  },[product])
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
