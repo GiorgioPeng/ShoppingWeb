@@ -28,7 +28,7 @@ function Kind(props) {
     const { setItemData, setSearchText } = props
     const classes = useStyles();
     const [backDropOpen, setBackdropOpen] = React.useState(false);
-    
+
     // type labels array
     const arr = ['clothes', 'toy', 'digital', 'medicine', 'car', 'baby', 'house', 'book', 'snack', 'tool']
 
@@ -52,7 +52,13 @@ function Kind(props) {
         let temp = arr.map((typeLabel, index) => states[index].value ? typeLabel : '')
         temp = temp.join(',')
         setBackdropOpen(true)
-        const res = await sendPost('/back_end_war_exploded/FindItem', 'ItemType=' + temp)
+        let res;
+        if (temp.length === 0) {
+            res = await sendPost('/back_end_war_exploded/FindItem',`ItemName=`)
+        }
+        else {
+            res = await sendPost('/back_end_war_exploded/FindItem', 'ItemType=' + temp)
+        }
         setBackdropOpen(false);
         setItemData(res.Item)
     }

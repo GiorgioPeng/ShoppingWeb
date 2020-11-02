@@ -12,7 +12,6 @@ const changer = (imgUrl)=>{
     let temp = window.location.toString().split('/')
     temp = temp.slice(0,3)
     imgUrl = temp.join('/') + '/back_end_war_exploded/' + imgUrl
-    console.log(imgUrl)
     return imgUrl
 }
 export default changer
