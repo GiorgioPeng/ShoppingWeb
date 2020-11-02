@@ -119,10 +119,11 @@ function Index(props) {
   React.useEffect(() => {
     setIdentify(id)
   }, [identify, id])
-  
-  React.useEffect(()=>{
-    setSumPrice(product.ItemPrice)
-  },[product])
+
+  React.useEffect(() => {
+    if (product?.ItemPrice)
+      setSumPrice(product.ItemPrice)
+  }, [product])
 
   return (
     <div className={classes.root}>
