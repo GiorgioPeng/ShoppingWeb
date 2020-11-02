@@ -195,10 +195,10 @@ function Index(props) {
         </Grid>
       </Paper>
       <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
-      <Notify open={notifyOpen} message={'加入收藏成功!'} type={'success'} handleClose={handleNotifyClose} />
-      <Notify open={notifyOpen4} message={'加入收藏失败!'} type={'error'} handleClose={handleNotifyClose4} />
-      <Notify open={notifyOpen2} message={'购买成功!'} type={'success'} handleClose={handleNotifyClose2} />
-      <Notify open={notifyOpen3} message={'购买失败!'} type={'error'} handleClose={handleNotifyClose3} />
+      <Notify open={notifyOpen} message={'Star success!'} type={'success'} handleClose={handleNotifyClose} />
+      <Notify open={notifyOpen4} message={'Star failed!'} type={'error'} handleClose={handleNotifyClose4} />
+      <Notify open={notifyOpen2} message={'Buy success!'} type={'success'} handleClose={handleNotifyClose2} />
+      <Notify open={notifyOpen3} message={'Buy failed!'} type={'error'} handleClose={handleNotifyClose3} />
     </div>
   );
 }
