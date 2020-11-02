@@ -14,6 +14,8 @@ import sendImgPost from '../../api/senImgPost'
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import linkTo from '../../compents/LinkTo';
+import CircularIndeterminate from '../../compents/CircularIndeterminate'
 
 // define CSS
 const useBackDropStyles = makeStyles((theme) => ({
@@ -71,6 +73,7 @@ const NewProduct = (props) => {
     }
     const [notifyOpen, setNotifyOpen] = React.useState(false)
     const [notifyOpen2, setNotifyOpen2] = React.useState(false)
+    const [backDropOpen, setBackdropOpen] = React.useState(false);
 
     // open the nofity of publishing success
     const handleNotifyOpen = () => {
@@ -106,7 +109,7 @@ const NewProduct = (props) => {
     // third send the image of the product to the backend
     // and then update the state of the component
     const ensurePublish = async () => {
-        console.log(productData.ItemPicture)
+        setBackdropOpen(true)
         if (productData.ItemPicture) {
             await sendPost('back_end_war_exploded/DeleteItem', `ItemID=${productData.ItemID}`)
             const data = `ItemName=${productData.ItemName}&ItemType=${productData.ItemType}&ItemPrice=${productData.ItemPrice}&ItemDescription=${productData.ItemDescription}&ItemQuantity=${productData.ItemQuantity}`
@@ -130,6 +133,8 @@ const NewProduct = (props) => {
                     }
                 )
             }
+            setBackdropOpen(false)
+            linkTo('shoppingweb')
         }
         else {
             handleNotifyOpen2()
@@ -232,6 +237,7 @@ const NewProduct = (props) => {
             </Dialog>
             <Notify open={notifyOpen} message={'Success'} type={'success'} handleClose={handleNotifyClose} />
             <Notify open={notifyOpen2} message={'Please upload image of the product!'} type={'error'} handleClose={handleNotifyClose2} />
+            <CircularIndeterminate backDropOpen={backDropOpen} handle={() => setBackdropOpen(false)} />
         </div>
     )
 }
